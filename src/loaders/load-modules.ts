@@ -3,7 +3,10 @@ import * as cors from 'cors'
 import { Express } from 'express';
 import * as bodyParser from 'body-parser'
 
-// Load express modules
+/**
+   * Express server adding modules.
+   * @param {server} - contain the initialized server instance 
+*/
 export default function(server: Express): void {
     console.info('Loading express modules...')
 

@@ -1,6 +1,12 @@
+// App Imports
 import * as mongoose from "mongoose";
-const Schema = mongoose.Schema;
 
+
+const Schema = mongoose.Schema;
+/**
+   * User Model.
+   * This model contain collection fields. The created schema will give the ability to interact with the collection. 
+*/
 const userSchema = new Schema({
   name: {
     type: String,

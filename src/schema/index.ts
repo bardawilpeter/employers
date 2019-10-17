@@ -5,7 +5,10 @@ import { GraphQLSchema } from 'graphql'
 import query from './query'
 import mutation from './mutations'
 
-// Schema
+/**
+   * Graphql schema.
+   * Containing the imported queries and mutation.
+*/
 const schema = new GraphQLSchema({
     query,
     mutation

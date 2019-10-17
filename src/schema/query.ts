@@ -2,7 +2,10 @@
 import { GraphQLObjectType } from 'graphql'
 import * as user from './users/fields/query'
 
-// Query for get 
+/**
+   * Graphql query.
+   * Containing the imported queries.
+*/
 const query = new GraphQLObjectType({
     name: 'query',
     description: 'Query get schema to pull element from db',

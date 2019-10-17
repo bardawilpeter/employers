@@ -6,7 +6,12 @@ import UserLoginType from '../types/user.login';
 import { login } from '../resolvers'
 
 
-//User Login
+/**
+   * UserLoginType.
+   * Containing the fields that will be sent to graphql "login" resolver.
+   * email contain user email
+   * password contain user password
+*/
 export const userLogin = {
     type: UserLoginType,
     args: {

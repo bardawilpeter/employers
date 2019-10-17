@@ -5,7 +5,10 @@ import { Express } from 'express';
 // App Imports
 import schema from '../schema';
 
-// Setup GraphQL
+/**
+   * Graphql server setup.
+   * @param {server} - contain the initialized server instance 
+*/
 export default function setupGraphQL(server: Express): void {
     console.info('Loading graphql endpoint...')
 
@@ -13,5 +16,5 @@ export default function setupGraphQL(server: Express): void {
         schema,
         graphiql: true,
         pretty: true
-    })))
+    })));
 }
