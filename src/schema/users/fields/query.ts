@@ -5,9 +5,8 @@ import { GraphQLString } from 'graphql'
 import UserLoginType from '../types/user.login';
 import { login } from '../resolvers'
 
-
 /**
-   * UserLoginType.
+   * userLogin query.
    * Containing the fields that will be sent to graphql "login" resolver.
    * email contain user email
    * password contain user password

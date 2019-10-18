@@ -3,6 +3,7 @@ import { GraphQLObjectType } from 'graphql'
 
 // App Imports
 import * as user from './users/fields/mutations'
+import * as employee from './employees/fields/mutations'
 
 /**
    * Graphql mutation.
@@ -13,7 +14,8 @@ const mutation = new GraphQLObjectType({
     description: 'Mutation set schema to change db data',
 
     fields: {
-        ...user
+        ...user,
+        ...employee
     }
 })
 

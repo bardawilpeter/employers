@@ -5,9 +5,8 @@ import { GraphQLString } from 'graphql'
 import UserType from '../types/user'
 import { createuser } from '../resolvers'
 
-
 /**
-   * UserType.
+   * signup mutation.
    * Containing the fields that will be sent to graphql "createUser" resolver.
    * name contain desired user name
    * email contain desired user email

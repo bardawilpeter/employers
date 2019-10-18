@@ -1,14 +1,15 @@
-// App Imports
-import { User } from '../../models/user';
+// Imports
 import * as bcrypt from 'bcryptjs';
 import validator = require('validator');
 import jwt = require('jsonwebtoken');
-import { create } from 'domain';
+
+// App Imports
+import { User } from '../../models/user';
 
 /**
    * Create User.
    * @param {args} - containing params sent by graphql expecting (email, name, password).
-   * @return {id:createdUser._id,name:createdUser.name,email:createdUser.email} The user id of the created user.
+   * @return {id:createdUser._id,name:createdUser.name,email:createdUser.email} The created user.
 */
 export async function createuser(parentValue: any, args: any) {
   const errors = [];
