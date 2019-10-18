@@ -1,5 +1,5 @@
 // Imports
-import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql'
+import { GraphQLObjectType, GraphQLString } from 'graphql'
 
 /**
    * UserType.
@@ -10,13 +10,13 @@ import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql'
 */
 const UserType = new GraphQLObjectType({
     name: 'UserType',
-    description: 'This type will describe user creation fields',
+    description: 'This type will describe user fields',
 
     fields: () => ({
         id: { type: GraphQLString },
         name: { type: GraphQLString },
         email: { type: GraphQLString }
     })
-})
+});
 
 export default UserType

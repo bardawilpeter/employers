@@ -1,5 +1,5 @@
 // Imports
-import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql'
+import { GraphQLObjectType, GraphQLString } from 'graphql'
 
 /**
    * UserLoginType.
@@ -19,6 +19,6 @@ const UserLoginType = new GraphQLObjectType({
         email: { type: GraphQLString },
         token: { type: GraphQLString }
     })
-})
+});
 
 export default UserLoginType
