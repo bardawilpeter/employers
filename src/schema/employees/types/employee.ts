@@ -27,6 +27,6 @@ const EmployeeType = new GraphQLObjectType({
         createdAt:  { type: GraphQLString },
         updatedAt:  { type: GraphQLString },
     })
-})
+});
 
 export default EmployeeType

@@ -44,6 +44,15 @@ export async function setEmployee(parentValue: any, args: any, req: any) {
 }
 
 /**
+   * Get Employees.
+   * @param {args} - containing params sent by graphql expecting (page).
+   * @return {id:createdEmployee._id,name:createdEmployee.name,email:createdUser.email,location:createdEmployee.location,department:createdEmployee.department,imageUrl:createdEmployee.imageUrl} The updated employee.
+*/
+export async function getEmployees(parentValue: any, args: any, req: any) {
+
+}
+
+/**
    * Employee Validator.
    * @param {args} - containing params sent by graphql expecting (name, email, location, department, imageUrl).
    * @return {errors} - containing array of errors if any
