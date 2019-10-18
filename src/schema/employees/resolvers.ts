@@ -26,6 +26,10 @@ export async function addEmployee(parentValue: any, args: any, req: any) {
   return await employee.save();
 }
 
+export async function setEmployee(parentValue: any, args: any, req: any) {
+
+}
+
 /**
    * Employee Validator.
    * @param {args} - containing params sent by graphql expecting (name, email, location, department, imageUrl).
