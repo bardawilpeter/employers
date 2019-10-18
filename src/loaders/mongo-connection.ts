@@ -1,7 +1,6 @@
 // Imports
 import * as mongoose from "mongoose";
 
-
 /**
    * MongoDB server.
    * This will create a mongoDB instance.

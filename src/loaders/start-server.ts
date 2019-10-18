@@ -13,9 +13,9 @@ export default function (server: Express): void {
     server.listen(3000, (error: any) => {
         MongoDB.connect();
         if (error) {
-            console.error('Unable to start express server please check the port')
+            console.error('Unable to start express server please check the port');
         } else {
-            console.info("Express server started on port 3001.")
+            console.info("Express server started on port 3001.");
         }
     })
 }

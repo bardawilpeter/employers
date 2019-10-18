@@ -1,5 +1,5 @@
 // Imports
-import * as graphqlHTTP from 'express-graphql'
+import * as graphqlHTTP from 'express-graphql';
 import { Express } from 'express';
 
 // App Imports
