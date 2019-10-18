@@ -1,6 +1,9 @@
-//App Imports
+//Imports
 import { GraphQLObjectType } from 'graphql'
+
+//App Imports
 import * as user from './users/fields/query'
+import * as employee from './employees/fields/query'
 
 /**
    * Graphql query.
@@ -11,7 +14,8 @@ const query = new GraphQLObjectType({
     description: 'Query get schema to pull element from db',
 
     fields: () => ({
-        ...user
+        ...user,
+        ...employee
     })
 })
 

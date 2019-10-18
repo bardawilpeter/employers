@@ -1,3 +1,4 @@
+// Imports
 import validator = require('validator');
 
 // App Imports
@@ -9,13 +10,7 @@ import { Employee } from '../../models/employee';
    * @return {id:createdEmployee._id,name:createdEmployee.name,email:createdUser.email,location:createdEmployee.location,department:createdEmployee.department,imageUrl:createdEmployee.imageUrl} The created employee.
 */
 export async function addEmployee(parentValue: any, args: any, req: any) {
-  const errors = validateEmployee(args);
-  if (errors.length > 0) {
-    const error = new Error('Invalid input.') as any;
-    error.data=errors;
-    error.code = 422;
-    throw error;
-  }
+  validateEmployee(args);
   const employee = new Employee({
     name: args.name,
     email: args.email,
@@ -26,8 +21,26 @@ export async function addEmployee(parentValue: any, args: any, req: any) {
   return await employee.save();
 }
 
+/**
+   * Set Employee.
+   * @param {args} - containing params sent by graphql expecting (name, email, location, department, imageUrl).
+   * @return {id:createdEmployee._id,name:createdEmployee.name,email:createdUser.email,location:createdEmployee.location,department:createdEmployee.department,imageUrl:createdEmployee.imageUrl} The updated employee.
+*/
 export async function setEmployee(parentValue: any, args: any, req: any) {
-
+  const employee = await Employee.findById(args._id);
+  validateEmployee(args);
+  employee.set("name", args.name);
+  employee.set("email", args.email);
+  employee.set("location", args.location);
+  employee.set("department", args.department);
+  employee.set("imageUrl", args.imageUrl);
+  const updatedEmployee = await employee.save() as any;
+  return {
+    ...updatedEmployee._doc,
+    _id: updatedEmployee._id.toString(),
+    createdAt: updatedEmployee.get("createdAt").toISOString(),
+    updatedAt: updatedEmployee.get("updatedAt").toISOString()
+  };
 }
 
 /**
@@ -53,5 +66,10 @@ export function validateEmployee(args: any) {
   {
     errors.push({ message: 'Department is invalid.' });
   }
-  return errors;
+  if (errors.length > 0) {
+    const error = new Error('Invalid input.') as any;//TODO add interface for custom error
+    error.data = errors;
+    error.code = 422;
+    throw error;
+  }
 }

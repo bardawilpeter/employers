@@ -23,7 +23,9 @@ export async function createuser(parentValue: any, args: any) {
     errors.push({ message: 'Password is too short.' });
   }
   if (errors.length > 0) {
-    const error = new Error('Invalid input.');
+    const error = new Error('Invalid input.') as any;
+    error.data = errors;
+    error.code = 422;
     throw error;
   }
   const existingUser = await User.findOne({ email: args.email });
@@ -38,10 +40,10 @@ export async function createuser(parentValue: any, args: any) {
     password: hashedPw
   });
   const createdUser = await user.save();
-  return { 
+  return {
     id: createdUser._id,
-    name:createdUser.get("name"),
-    email:createdUser.get("email")
+    name: createdUser.get("name"),
+    email: createdUser.get("email")
   };
 }
 
@@ -69,9 +71,9 @@ export async function login(parentValue: any, args: any) {
     'somesupersecretsecret',
     { expiresIn: '1h' }
   );
-  return { 
+  return {
     id: user.get("_id"),
-     token: token, 
-     name: user.get("name")
+    token: token,
+    name: user.get("name")
   };
 }
