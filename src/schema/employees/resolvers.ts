@@ -10,7 +10,7 @@ import { Employee } from '../../models/employee';
    * @return {id:createdEmployee._id,name:createdEmployee.name,email:createdEmployee.email,location:createdEmployee.location,department:createdEmployee.department,imageUrl:createdEmployee.imageUrl} The created employee.
 */
 export async function addEmployee(parentValue: any, args: any, req: any) {
-  //TODO add check if user is auth to get employees
+  checkAuth(req.isAuth);
   validateEmployee(args);
   const employee = new Employee({
     name: args.name,
@@ -28,7 +28,7 @@ export async function addEmployee(parentValue: any, args: any, req: any) {
    * @return {id:updatedEmployee._id,name:updatedEmployee.name,email:updatedEmployee.email,location:updatedEmployee.location,department:updatedEmployee.department,imageUrl:updatedEmployee.imageUrl} The updated employee.
 */
 export async function setEmployee(parentValue: any, args: any, req: any) {
-  //TODO add check if user is auth to get employees
+  checkAuth(req.isAuth);
   const employee = await Employee.findById(args.id);
   validateEmployee(args);
   employee.set("name", args.name);
@@ -52,7 +52,7 @@ export async function setEmployee(parentValue: any, args: any, req: any) {
 */
 export async function getEmployees(parentValue: any, args: any, req: any) {
   //TODO add ability to search in post
-  //TODO add check if user is auth to get employees
+  checkAuth(req.isAuth);
   const page = (!args.page) ? 1 : args.page;
   const perPage = 2;
   const totalEmployees = await Employee.find().countDocuments();
@@ -79,7 +79,7 @@ export async function getEmployees(parentValue: any, args: any, req: any) {
    * @return {id:foundEmployee._id,name:foundEmployee.name,email:foundEmployee.email,location:foundEmployee.location,department:foundEmployee.department,imageUrl:foundEmployee.imageUrl} contain employees list with total number of employees.
 */
 export async function getEmployee(parentValue: any, args: any, req: any) {
-  //TODO add check if user is auth to get employees
+  checkAuth(req.isAuth);
   const employee = await Employee.findById(args.id) as any;
   return {
     ...employee._doc,
@@ -95,10 +95,10 @@ export async function getEmployee(parentValue: any, args: any, req: any) {
    * @return {_id:deletedUser.id} id of the deleted employee.
 */
 export async function deleteEmployee(parentValue: any, args: any, req: any) {
-  //TODO add check if user is auth to get employees
+  checkAuth(req.isAuth);
   const employee = await Employee.findById(args.id);
   await Employee.findByIdAndRemove(employee._id);
-  return {_id:employee._id};
+  return { _id: employee._id };
 }
 
 /**
@@ -124,6 +124,19 @@ export function validateEmployee(args: any) {
     const error = new Error('Invalid input.') as any;//TODO add interface for custom error
     error.data = errors;
     error.code = 422;
+    throw error;
+  }
+}
+
+/**
+   * Auth checker.
+   * @param {requestAuth} - contain if isAuth true set in the "isAuth" middleware
+   * throw error if user not authenticated
+*/
+export function checkAuth(requestAuth: boolean) {
+  if (!requestAuth) {
+    const error = new Error('User not authenticated.') as any;
+    error.code = 401;
     throw error;
   }
 }
