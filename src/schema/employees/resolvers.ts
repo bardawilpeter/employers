@@ -10,6 +10,7 @@ import { Employee } from '../../models/employee';
    * @return {id:createdEmployee._id,name:createdEmployee.name,email:createdUser.email,location:createdEmployee.location,department:createdEmployee.department,imageUrl:createdEmployee.imageUrl} The created employee.
 */
 export async function addEmployee(parentValue: any, args: any, req: any) {
+  //TODO add check if user is auth to get employees
   validateEmployee(args);
   const employee = new Employee({
     name: args.name,
@@ -27,6 +28,7 @@ export async function addEmployee(parentValue: any, args: any, req: any) {
    * @return {id:createdEmployee._id,name:createdEmployee.name,email:createdUser.email,location:createdEmployee.location,department:createdEmployee.department,imageUrl:createdEmployee.imageUrl} The updated employee.
 */
 export async function setEmployee(parentValue: any, args: any, req: any) {
+  //TODO add check if user is auth to get employees
   const employee = await Employee.findById(args._id);
   validateEmployee(args);
   employee.set("name", args.name);
@@ -50,6 +52,7 @@ export async function setEmployee(parentValue: any, args: any, req: any) {
 */
 export async function getEmployees(parentValue: any, args: any, req: any) {
   //TODO add ability to search in post
+  //TODO add check if user is auth to get employees
   const page = (!args.page)?1:args.page;
   const perPage = 2;
   const totalEmployees = await Employee.find().countDocuments();
