@@ -1,0 +1,10 @@
+.navigation-item{
+    padding: 0 10px;
+    display:inline-block;
+}
+
+.navigation-item a{
+    color:#fff;
+    text-decoration: none;
+    text-transform: capitalize;
+}

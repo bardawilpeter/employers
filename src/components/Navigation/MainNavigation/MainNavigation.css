@@ -1,0 +1,8 @@
+.main-nav::after{
+    content:"";
+    clear: both;
+    display:block;
+}
+.main-nav-items{
+    float:right;
+}

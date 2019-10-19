@@ -1,3 +1,9 @@
-.logo{
+.main-nav-logo{
     color:#fff;
+    float:left;
+}
+
+.main-nav-logo a{
+    color:#fff;
+    text-decoration: none;
 }
