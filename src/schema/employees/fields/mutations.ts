@@ -52,7 +52,23 @@ export const updateEmployee = {
     type: EmployeeType,
     args: {
         ...createEmployee.args,
-        _id: {
+        id: {
+            name: 'id',
+            type: GraphQLString
+        }
+    },
+    resolve: setEmployee
+}
+
+/**
+   * deleteEmployee mutation.
+   * Containing the fields that will be sent to graphql "deleteUser" resolver.
+   * id contain desired employee id
+*/
+export const deleteEmployee = {
+    type: EmployeeType,
+    args: {
+        id: {
             name: 'id',
             type: GraphQLString
         }

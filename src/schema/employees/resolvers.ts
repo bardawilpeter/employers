@@ -29,7 +29,7 @@ export async function addEmployee(parentValue: any, args: any, req: any) {
 */
 export async function setEmployee(parentValue: any, args: any, req: any) {
   //TODO add check if user is auth to get employees
-  const employee = await Employee.findById(args._id);
+  const employee = await Employee.findById(args.id);
   validateEmployee(args);
   employee.set("name", args.name);
   employee.set("email", args.email);
@@ -82,6 +82,10 @@ export async function getEmployee(parentValue: any, args: any, req: any) {
     createdAt: employee.createdAt.toISOString(),
     updatedAt: employee.updatedAt.toISOString()
   };
+}
+
+export async function deleteEmployee(parentValue: any, args: any, req: any) {
+  //TODO add check if user is auth to get employees
 }
 
 /**
