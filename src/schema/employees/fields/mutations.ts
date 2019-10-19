@@ -3,7 +3,7 @@ import { GraphQLString } from 'graphql'
 
 // App Imports
 import EmployeeType from '../types/employee'
-import { addEmployee, setEmployee } from '../resolvers'
+import { addEmployee, setEmployee, deleteEmployee } from '../resolvers'
 
 /**
    * createEmployee mutation.
@@ -65,7 +65,7 @@ export const updateEmployee = {
    * Containing the fields that will be sent to graphql "deleteUser" resolver.
    * id contain desired employee id
 */
-export const deleteEmployee = {
+export const remove = {
     type: EmployeeType,
     args: {
         id: {
@@ -73,5 +73,5 @@ export const deleteEmployee = {
             type: GraphQLString
         }
     },
-    resolve: setEmployee
+    resolve: deleteEmployee
 }

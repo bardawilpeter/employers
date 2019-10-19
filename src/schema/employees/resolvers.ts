@@ -53,7 +53,7 @@ export async function setEmployee(parentValue: any, args: any, req: any) {
 export async function getEmployees(parentValue: any, args: any, req: any) {
   //TODO add ability to search in post
   //TODO add check if user is auth to get employees
-  const page = (!args.page)?1:args.page;
+  const page = (!args.page) ? 1 : args.page;
   const perPage = 2;
   const totalEmployees = await Employee.find().countDocuments();
   const employees = await Employee.find()
@@ -61,7 +61,7 @@ export async function getEmployees(parentValue: any, args: any, req: any) {
     .skip((page - 1) * perPage)
     .limit(perPage);
   return {
-    employeesList: employees.map((employee:any) => {
+    employeesList: employees.map((employee: any) => {
       return {
         ...employee._doc,
         _id: employee._id.toString(),
@@ -92,10 +92,13 @@ export async function getEmployee(parentValue: any, args: any, req: any) {
 /**
    * Delete Employee.
    * @param {args} - containing params sent by graphql expecting (id).
-   * @return {delete:deleted} deleted if the employee found and deleted.
+   * @return {_id:deletedUser.id} id of the deleted employee.
 */
 export async function deleteEmployee(parentValue: any, args: any, req: any) {
   //TODO add check if user is auth to get employees
+  const employee = await Employee.findById(args.id);
+  await Employee.findByIdAndRemove(employee._id);
+  return {_id:employee._id};
 }
 
 /**
@@ -105,20 +108,16 @@ export async function deleteEmployee(parentValue: any, args: any, req: any) {
 */
 export function validateEmployee(args: any) {
   const errors = [];
-  if (validator.isEmpty(args.name)||validator.isLength(args.name,{min:5}))
-  {
+  if (validator.isEmpty(args.name) || validator.isLength(args.name, { min: 5 })) {
     errors.push({ message: 'Title is invalid.' });
   }
-  if (validator.isEmpty(args.email) || !validator.isEmail(args.email))
-  {
+  if (validator.isEmpty(args.email) || !validator.isEmail(args.email)) {
     errors.push({ message: 'Email is invalid.' });
   }
-  if (validator.isEmpty(args.location)||validator.isLength(args.name,{min:5}))
-  {
+  if (validator.isEmpty(args.location) || validator.isLength(args.name, { min: 5 })) {
     errors.push({ message: 'Location is invalid.' });
   }
-  if (validator.isEmpty(args.department)||validator.isLength(args.name,{min:5}))
-  {
+  if (validator.isEmpty(args.department) || validator.isLength(args.name, { min: 5 })) {
     errors.push({ message: 'Department is invalid.' });
   }
   if (errors.length > 0) {
