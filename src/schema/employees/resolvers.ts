@@ -74,7 +74,14 @@ export async function getEmployees(parentValue: any, args: any, req: any) {
 }
 
 export async function getEmployee(parentValue: any, args: any, req: any) {
- 
+  //TODO add check if user is auth to get employees
+  const employee = await Employee.findById(args.id) as any;
+  return {
+    ...employee._doc,
+    _id: employee._id.toString(),
+    createdAt: employee.createdAt.toISOString(),
+    updatedAt: employee.updatedAt.toISOString()
+  };
 }
 
 /**
