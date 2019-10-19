@@ -73,6 +73,10 @@ export async function getEmployees(parentValue: any, args: any, req: any) {
   };
 }
 
+export async function getEmployee(parentValue: any, args: any, req: any) {
+ 
+}
+
 /**
    * Employee Validator.
    * @param {args} - containing params sent by graphql expecting (name, email, location, department, imageUrl).
