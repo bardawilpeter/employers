@@ -7,7 +7,7 @@ import { Employee } from '../../models/employee';
 /**
    * Add Employee.
    * @param {args} - containing params sent by graphql expecting (name, email, location, department, imageUrl).
-   * @return {id:createdEmployee._id,name:createdEmployee.name,email:createdUser.email,location:createdEmployee.location,department:createdEmployee.department,imageUrl:createdEmployee.imageUrl} The created employee.
+   * @return {id:createdEmployee._id,name:createdEmployee.name,email:createdEmployee.email,location:createdEmployee.location,department:createdEmployee.department,imageUrl:createdEmployee.imageUrl} The created employee.
 */
 export async function addEmployee(parentValue: any, args: any, req: any) {
   //TODO add check if user is auth to get employees
@@ -25,7 +25,7 @@ export async function addEmployee(parentValue: any, args: any, req: any) {
 /**
    * Set Employee.
    * @param {args} - containing params sent by graphql expecting (name, email, location, department, imageUrl).
-   * @return {id:createdEmployee._id,name:createdEmployee.name,email:createdUser.email,location:createdEmployee.location,department:createdEmployee.department,imageUrl:createdEmployee.imageUrl} The updated employee.
+   * @return {id:updatedEmployee._id,name:updatedEmployee.name,email:updatedEmployee.email,location:updatedEmployee.location,department:updatedEmployee.department,imageUrl:updatedEmployee.imageUrl} The updated employee.
 */
 export async function setEmployee(parentValue: any, args: any, req: any) {
   //TODO add check if user is auth to get employees
@@ -73,6 +73,11 @@ export async function getEmployees(parentValue: any, args: any, req: any) {
   };
 }
 
+/**
+   * Get Employee.
+   * @param {args} - containing params sent by graphql expecting (id).
+   * @return {id:foundEmployee._id,name:foundEmployee.name,email:foundEmployee.email,location:foundEmployee.location,department:foundEmployee.department,imageUrl:foundEmployee.imageUrl} contain employees list with total number of employees.
+*/
 export async function getEmployee(parentValue: any, args: any, req: any) {
   //TODO add check if user is auth to get employees
   const employee = await Employee.findById(args.id) as any;
@@ -84,6 +89,11 @@ export async function getEmployee(parentValue: any, args: any, req: any) {
   };
 }
 
+/**
+   * Delete Employee.
+   * @param {args} - containing params sent by graphql expecting (id).
+   * @return {delete:deleted} deleted if the employee found and deleted.
+*/
 export async function deleteEmployee(parentValue: any, args: any, req: any) {
   //TODO add check if user is auth to get employees
 }
