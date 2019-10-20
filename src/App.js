@@ -46,14 +46,19 @@ class App extends Component {
           throw new Error('User login failed. check username or password.');
         }
         console.log(resData);
-       
         this.setState({
           isAuth: true,
           token: resData.data.userLogin.token,
           userId: resData.data.userLogin.id,
           reqLoading:false
         });
-        //TODO add token to storage after authentication
+        localStorage.setItem('token', resData.data.userLogin.token);
+        localStorage.setItem('userId', resData.data.userLogin.userId);
+        const remainingMilliseconds = 60 * 60 * 1000;
+        const expiryDate = new Date(
+          new Date().getTime() + remainingMilliseconds
+        );
+        localStorage.setItem('expiryDate', expiryDate.toISOString());
       })
       .catch(err => {
         console.log(err);
