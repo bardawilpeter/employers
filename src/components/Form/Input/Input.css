@@ -1,0 +1,15 @@
+.input-holder{
+    padding-top:10px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+.input-holder label{
+    display: block;
+    color:#fff;
+    padding-bottom:10px;
+}
+
+.input-holder input{
+    height:30px;
+    width:100%;
+}
