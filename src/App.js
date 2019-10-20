@@ -5,6 +5,7 @@ import Layout from './components/Layout/Layout';
 import MainNavigation from './components/Navigation/MainNavigation/MainNavigation';
 import LoginPage from './pages/Auth/Login';
 import SignupPage from './pages/Auth/Signup';
+import Members from './pages/Members/Members';
 import './App.css';
 
 class App extends Component {
@@ -179,7 +180,7 @@ class App extends Component {
             path="/"
             exact
             render={props => (
-              <Fragment>Authenticated</Fragment>
+              <Members/>
             )}
           />
           <Redirect to="/" />
