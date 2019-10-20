@@ -12,4 +12,13 @@
 .input-holder input{
     height:30px;
     width:100%;
+    padding-left:10px;
+}
+
+.input-holder input.valid{
+   border:2px#33FF8A solid;
+}
+
+.input-holder input.invalid{
+    border:2px #FF3333 solid;
 }
