@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Input from '../../components/Form/Input/Input';
 import Button from '../../components/Button/Button';
+import Title from '../../components/Form/Title/Title';
 import { required, length, email } from '../../util/validators';
 import Auth from './Auth';
 
@@ -72,6 +73,7 @@ class Signup extends Component {
   render() {
     return (
       <Auth>
+          <Title title="Signup"/>
         <form onSubmit={e => this.props.onSignup(e, this.state)}>
           <Input
             id="email"

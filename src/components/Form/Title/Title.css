@@ -1,0 +1,10 @@
+.form-title{
+    text-align: center;
+    border-bottom: 1px #fff solid;
+    padding: 20px 0;
+    margin: 0;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: normal;
+    font-size: 28px;
+}
