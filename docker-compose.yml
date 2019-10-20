@@ -1,0 +1,10 @@
+version: "3"
+services:
+  app:
+    container_name: employers-container
+    restart: always
+    build: ./
+    ports:
+      - "8090:3000"
+    volumes:
+      - .:/app
