@@ -13,7 +13,21 @@ class App extends Component {
     reqLoading: false
   };
 
-  
+  componentDidMount() {
+    const token = localStorage.getItem('token');
+    const expiryDate = localStorage.getItem('expiryDate');
+    if (!token || !expiryDate) {
+      return;
+    }
+    if (new Date(expiryDate) <= new Date()) {
+      //TODO add logout handler
+      return;
+    }
+    const userId = localStorage.getItem('userId');
+    this.setState({ isAuth: true, token: token, userId: userId });
+    //TODO check expiry date if still valid
+  }
+
   loginHandler = (event, authData) => {
     event.preventDefault();
     const graphqlQuery = {
@@ -50,7 +64,7 @@ class App extends Component {
           isAuth: true,
           token: resData.data.userLogin.token,
           userId: resData.data.userLogin.id,
-          reqLoading:false
+          reqLoading: false
         });
         localStorage.setItem('token', resData.data.userLogin.token);
         localStorage.setItem('userId', resData.data.userLogin.userId);
@@ -64,7 +78,7 @@ class App extends Component {
         console.log(err);
         this.setState({
           isAuth: false,
-          reqLoading:false
+          reqLoading: false
         });
       });
   };
@@ -92,28 +106,28 @@ class App extends Component {
       },
       body: JSON.stringify(graphqlQuery)
     })
-    .then(res => {
-      return res.json();
-    })
-    .then(resData => {
-      if (resData.errors && resData.errors[0].status === 422) {
-        throw new Error(
-          "Validation failed. check you email address"
-        );
-      }
-      if (resData.errors) {
-        throw new Error('User creation failed');
-      }
-      this.setState({ isAuth: false, reqLoading: false });
-      this.props.history.replace('/');
-    })
-    .catch(err => {
-      this.setState({
-        isAuth: false,
-        reqLoading: false,
-        error: err
+      .then(res => {
+        return res.json();
+      })
+      .then(resData => {
+        if (resData.errors && resData.errors[0].status === 422) {
+          throw new Error(
+            "Validation failed. check you email address"
+          );
+        }
+        if (resData.errors) {
+          throw new Error('User creation failed');
+        }
+        this.setState({ isAuth: false, reqLoading: false });
+        this.props.history.replace('/');
+      })
+      .catch(err => {
+        this.setState({
+          isAuth: false,
+          reqLoading: false,
+          error: err
+        });
       });
-    });
   };
 
   render() {
@@ -144,14 +158,28 @@ class App extends Component {
         <Redirect to="/" />
       </Switch>
     );
+    if (this.state.isAuth) {
+      routes = (
+        <Switch>
+          <Route
+            path="/"
+            exact
+            render={props => (
+              <Fragment>Authenticated</Fragment>
+            )}
+          />
+          <Redirect to="/" />
+        </Switch>
+      );
+    }
     return (
       <Fragment>
         <Layout
           header={
-              <MainNavigation
-                onLogout={this.logoutHandler}
-                isAuth={this.state.isAuth}
-              />
+            <MainNavigation
+              onLogout={this.logoutHandler}
+              isAuth={this.state.isAuth}
+            />
           }
         />
         {routes}
