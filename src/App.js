@@ -20,12 +20,13 @@ class App extends Component {
       return;
     }
     if (new Date(expiryDate) <= new Date()) {
-      //TODO add logout handler
+      this.logoutHandler();
       return;
     }
     const userId = localStorage.getItem('userId');
     this.setState({ isAuth: true, token: token, userId: userId });
-    //TODO check expiry date if still valid
+    const remainingTime=new Date(expiryDate).getTime() - new Date().getTime();
+    this.setAutoLogout(remainingTime)
   }
 
   loginHandler = (event, authData) => {
@@ -128,6 +129,19 @@ class App extends Component {
           error: err
         });
       });
+  };
+
+  logoutHandler = () => {
+    this.setState({ isAuth: false, token: null });
+    localStorage.removeItem('token');
+    localStorage.removeItem('expiryDate');
+    localStorage.removeItem('userId');
+  };
+
+  setAutoLogout = remainingTime => {
+    setTimeout(() => {
+      this.logoutHandler();
+    }, remainingTime);
   };
 
   render() {
