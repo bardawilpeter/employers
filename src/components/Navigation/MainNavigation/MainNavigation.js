@@ -14,7 +14,7 @@ const mainNavigation = props => (
     </div>
     <div className="main-nav-items">
       <ul className="main-nav-items-list">
-        <NavigationItems isAuth={false} />
+        <NavigationItems isAuth={props.isAuth} />
       </ul>
     </div>
   </nav>
