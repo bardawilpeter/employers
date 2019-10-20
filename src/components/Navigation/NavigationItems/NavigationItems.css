@@ -1,10 +1,31 @@
 .navigation-item{
-    padding: 0 10px;
     display:inline-block;
+    width:80px;
+    height:40px;
+    line-height:40px;
+    text-align:center;
+    margin-left:10px;
 }
 
 .navigation-item a{
+
+    border:1px #1f2866 solid;
     color:#1f2866;
     text-decoration: none;
     text-transform: capitalize;
+ 
+    display:block;
+    height:100%;
+    width:100%;
+}
+
+.navigation-item a.active{
+    text-decoration: none;
+    text-transform: capitalize;
+    background: transparent;
+    color:#fff;
+    background:#1f2866;   
+    display:block;
+    height:100%;
+    width:100%;
 }
