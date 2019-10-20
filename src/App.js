@@ -10,11 +10,63 @@ import './App.css';
 class App extends Component {
   state = {
     isAuth: false,
+    reqLoading: false
+  };
+
+  
+  loginHandler = (event, authData) => {
+    event.preventDefault();
+    const graphqlQuery = {
+      query: `
+      query{
+        userLogin(
+          email:"${authData.email}",
+          password:"${authData.password}") {
+          id,
+          token
+        }
+      }
+        
+      `
+    };
+    this.setState({ reqLoading: true });
+    fetch('http://localhost:3033/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(graphqlQuery)
+    })
+      .then(res => {
+        return res.json();
+      })
+      .then(resData => {
+        if (resData.errors) {
+          this.setState({ reqLoading: false });
+          throw new Error('User login failed. check username or password.');
+        }
+        console.log(resData);
+       
+        this.setState({
+          isAuth: true,
+          token: resData.data.userLogin.token,
+          userId: resData.data.userLogin.id,
+          reqLoading:false
+        });
+        //TODO add token to storage after authentication
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({
+          isAuth: false,
+          reqLoading:false
+        });
+      });
   };
 
   signupHandler = (event, authData) => {
     event.preventDefault();
-    this.setState({ authLoading: true });
+    this.setState({ reqLoading: true });
     const graphqlQuery = {
       query: `
       mutation {
@@ -35,27 +87,28 @@ class App extends Component {
       },
       body: JSON.stringify(graphqlQuery)
     })
-      .then(res => {
-        return res.json();
-      })
-      .then(resData => {
-        if (resData.errors && resData.errors[0].status === 422) {
-          throw new Error(
-            "Form validation failed."
-          );
-        }
-        if (resData.errors) {
-          throw new Error('User creation failed!');
-        }
-        this.setState({ isAuth: false });
-        this.props.history.replace('/');
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({
-          isAuth: false
-        });
+    .then(res => {
+      return res.json();
+    })
+    .then(resData => {
+      if (resData.errors && resData.errors[0].status === 422) {
+        throw new Error(
+          "Validation failed. check you email address"
+        );
+      }
+      if (resData.errors) {
+        throw new Error('User creation failed');
+      }
+      this.setState({ isAuth: false, reqLoading: false });
+      this.props.history.replace('/');
+    })
+    .catch(err => {
+      this.setState({
+        isAuth: false,
+        reqLoading: false,
+        error: err
       });
+    });
   };
 
   render() {
@@ -68,7 +121,7 @@ class App extends Component {
             <LoginPage
               {...props}
               onLogin={this.loginHandler}
-              loading={this.state.authLoading}
+              loading={this.state.reqLoading}
             />
           )}
         />

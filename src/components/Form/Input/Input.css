@@ -15,10 +15,10 @@
     padding-left:10px;
 }
 
-.input-holder input.valid{
+.input-holder input.valid.touched{
    border:2px#33FF8A solid;
 }
 
-.input-holder input.invalid{
+.input-holder input.invalid.touched{
     border:2px #FF3333 solid;
 }
