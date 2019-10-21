@@ -21,8 +21,8 @@ const navigationItems = props => [
         </li>
     )),
     props.isAuth && (
-        <li className="navigation-item">
-            <a href="javascript:void(0)" onClick={props.onLogout}>Logout</a>
+        <li className="navigation-item" key="logout">
+            <a onClick={props.onLogout}>Logout</a>
         </li>
     )
 ];

@@ -180,7 +180,9 @@ class App extends Component {
             path="/"
             exact
             render={props => (
-              <Members/>
+              <Members
+              userId={this.state.userId} token={this.state.token}
+              />
             )}
           />
           <Redirect to="/" />

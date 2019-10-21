@@ -7,6 +7,7 @@ const memberItem = props => (
     <div className="member-head">
         {props.name}<br/>
         {props.email}<br/>
+        {props.date}<br/>
         {props.department}<br/>
         {props.location}<br/>
     </div>

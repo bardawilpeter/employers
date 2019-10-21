@@ -4,20 +4,78 @@ import MemberItem from '../../components/MemberItem/MemberItem';
 import './Members.css';
 
 class Members extends Component {
-  render() {
-    return (
-      <Fragment>
-        <section className="members-list">
-        <MemberItem
-            name={"john"}
-            email={"john.doe@hotmail.com"}
-            location={"xyz"}
-            department={"dev"}
-        />
-        </section>
-      </Fragment>
-    );
-  }
+    state = {
+        members: [],
+        totalEmployees: 0
+    };
+    componentDidMount() {
+        this.loadMembers();
+    }
+    loadMembers = () => {
+        const graphqlQuery = {
+            query: `
+            query {
+                employees(page:1){
+                  employeesList{
+                      _id,
+                      name,
+                      email,
+                      location,
+                      department,
+                      createdAt
+                  },
+                  totalEmployees
+                }
+              }
+          `
+        };
+        fetch('http://localhost:3033/graphql', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + this.props.token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(graphqlQuery)
+        })
+            .then(res => {
+                return res.json();
+            })
+            .then(resData => {
+                if (resData.errors) {
+                    throw new Error('Failed to get members.');
+                }
+                this.setState({
+                    members: resData.data.employees.employeesList.map(member => {
+                        return {
+                            ...member,
+                            imagePath: member.imageUrl
+                        };
+                    }),
+                    totalEmployees: resData.data.employees.totalEmployees
+                });
+            })
+            .catch(this.catchError);
+    };
+    render() {
+        return (
+            <Fragment>
+                <section className="members-list">
+                    {this.state.members.map(member => (
+                        <MemberItem
+                            key={member._id}
+                            id={member._id}
+                            email={member.email}
+                            date={new Date(member.createdAt).toLocaleDateString('en-US')}
+                            name={member.name}
+                            location={member.location}
+                            department={member.department}
+                            image={member.imagePath}
+                        />
+                    ))}
+                </section>
+            </Fragment>
+        );
+    }
 }
 
 export default Members;
