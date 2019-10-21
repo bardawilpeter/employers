@@ -7,7 +7,7 @@ import * as mongoose from "mongoose";
 */
 export class MongoDB {
     public static connect(): void {
-      const uri = "mongodb+srv://peterb:swardfish@cluster0-ehayv.mongodb.net/messages?retryWrites=true&w=majority";
+      const uri = process.env.MONGO_DB;
 
         mongoose.connect(uri,
         { 

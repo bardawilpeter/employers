@@ -68,7 +68,7 @@ export async function login(parentValue: any, args: any) {
       userId: user._id.toString(),
       email: user.get("email")
     },
-    'somesupersecretsecret',
+    process.env.JWT_SECRET,
     { expiresIn: '1h' }
   );
   return {

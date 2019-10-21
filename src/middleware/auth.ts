@@ -18,7 +18,7 @@ export async function isAuth(req: any, res: any, next: any) {
     // Decode token to check if user is authorized
     let decodedToken;
     try {
-        decodedToken = jwt.verify(token, 'somesupersecretsecret') as any;
+        decodedToken = jwt.verify(token, process.env.JWT_SECRET) as any;
     } catch (err) {
         req.isAuth = false;
         return next();
