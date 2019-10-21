@@ -4,7 +4,14 @@ services:
     container_name: employers-container
     restart: always
     build: ./
+    environment:
+      - PORT=3000
+      - JWT_SECRET=###########
+      - MONGO_DB=mongodb://mongo:27017/employers
     ports:
       - "8090:3000"
-    volumes:
-      - .:/app
+  mongo:
+    container_name: employers-mongo
+    image: mongo
+    ports:
+      - "27017:27017"
