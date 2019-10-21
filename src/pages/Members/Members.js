@@ -8,9 +8,11 @@ class Members extends Component {
         members: [],
         totalEmployees: 0
     };
+
     componentDidMount() {
         this.loadMembers();
     }
+
     loadMembers = () => {
         const graphqlQuery = {
             query: `
@@ -54,8 +56,44 @@ class Members extends Component {
                     totalEmployees: resData.data.employees.totalEmployees
                 });
             })
-            .catch(this.catchError);
+            .catch(err => {
+                throw err;
+             });
     };
+
+    deleteMemberHandler = memberId => {
+        alert(memberId);
+        const graphqlQuery = {
+            query: `
+            mutation {
+              remove(id: "${memberId}"){
+                  _id
+              }
+            }
+          `
+        };
+        fetch('http://localhost:3033/graphql', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + this.props.token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(graphqlQuery)
+        })
+            .then(res => {
+                return res.json();
+            })
+            .then(resData => {
+                if (resData.errors) {
+                    throw new Error('Cannot delete member.');
+                }
+                this.loadMembers();
+            })
+            .catch(err => {
+               throw err;
+            });
+    };
+
     render() {
         return (
             <Fragment>
@@ -70,6 +108,7 @@ class Members extends Component {
                             location={member.location}
                             department={member.department}
                             image={member.imagePath}
+                            onDelete={this.deleteMemberHandler.bind(this, member._id)}
                         />
                     ))}
                 </section>

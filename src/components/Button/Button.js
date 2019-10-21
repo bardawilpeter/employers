@@ -7,6 +7,7 @@ const button = props =>(
       className="button"
       type={props.type}
       disabled={props.disabled || props.loading}
+      onClick={props.onClick}
     >
       {props.loading ? 'Loading...' : props.children}
     </button>
