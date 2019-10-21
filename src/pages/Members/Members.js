@@ -1,11 +1,13 @@
 import React, { Component, Fragment } from 'react';
 
 import MemberItem from '../../components/MemberItem/MemberItem';
+import Pagination from '../../components/Pagination/Pagination';
 import './Members.css';
 
 class Members extends Component {
     state = {
         members: [],
+        memberPage: 1,
         totalEmployees: 0
     };
 
@@ -13,11 +15,23 @@ class Members extends Component {
         this.loadMembers();
     }
 
-    loadMembers = () => {
+    loadMembers = direction => {
+        if (direction) {
+            this.setState({ members: [] });
+          }
+          let page = this.state.memberPage;
+          if (direction === 'next') {
+            page++;
+            this.setState({ memberPage: page });
+          }
+          if (direction === 'previous') {
+            page--;
+            this.setState({ memberPage: page });
+          }
         const graphqlQuery = {
             query: `
             query {
-                employees(page:1){
+                employees(page:${page}){
                   employeesList{
                       _id,
                       name,
@@ -58,11 +72,10 @@ class Members extends Component {
             })
             .catch(err => {
                 throw err;
-             });
+            });
     };
 
     deleteMemberHandler = memberId => {
-        alert(memberId);
         const graphqlQuery = {
             query: `
             mutation {
@@ -90,7 +103,7 @@ class Members extends Component {
                 this.loadMembers();
             })
             .catch(err => {
-               throw err;
+                throw err;
             });
     };
 
@@ -98,19 +111,26 @@ class Members extends Component {
         return (
             <Fragment>
                 <section className="members-list">
-                    {this.state.members.map(member => (
-                        <MemberItem
-                            key={member._id}
-                            id={member._id}
-                            email={member.email}
-                            date={new Date(member.createdAt).toLocaleDateString('en-US')}
-                            name={member.name}
-                            location={member.location}
-                            department={member.department}
-                            image={member.imagePath}
-                            onDelete={this.deleteMemberHandler.bind(this, member._id)}
-                        />
-                    ))}
+                    <Pagination
+                        onPrevious={this.loadMembers.bind(this, 'previous')}
+                        onNext={this.loadMembers.bind(this, 'next')}
+                        lastPage={Math.ceil(this.state.totalEmployees / 2)}
+                        currentPage={this.state.memberPage}
+                    >
+                        {this.state.members.map(member => (
+                            <MemberItem
+                                key={member._id}
+                                id={member._id}
+                                email={member.email}
+                                date={new Date(member.createdAt).toLocaleDateString('en-US')}
+                                name={member.name}
+                                location={member.location}
+                                department={member.department}
+                                image={member.imagePath}
+                                onDelete={this.deleteMemberHandler.bind(this, member._id)}
+                            />
+                        ))}
+                    </Pagination>
                 </section>
             </Fragment>
         );
