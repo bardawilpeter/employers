@@ -270,7 +270,7 @@ class Members extends Component {
             searchQuery: (value != "") ? value : null,
             memberPage: 1
         }, () => {
-            this.loadMembers(null, value);
+            this.loadMembers();
         });
     }
 
