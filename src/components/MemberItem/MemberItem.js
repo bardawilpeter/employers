@@ -12,6 +12,9 @@ const memberItem = props => (
             {props.department}<br />
             {props.location}<br />
         </div>
+        <Button onClick={props.onStartEdit}>
+            Edit
+      </Button>
         <Button onClick={props.onDelete}>
             Delete
       </Button>

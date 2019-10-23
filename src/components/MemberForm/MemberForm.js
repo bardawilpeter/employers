@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 
 import FormHolder from '../FormHolder/FormHolder';
 import Input from '../Form/Input/Input';
-import { required, length } from '../../util/validators';
+import { required, length, email } from '../../util/validators';
 import './MemberForm.css';
 
 const MEMBER_INIIAL_FORM = {
@@ -16,7 +16,7 @@ const MEMBER_INIIAL_FORM = {
     value: '',
     valid: false,
     touched: false,
-    validators: [required]
+    validators: [required, email]
   },
   location: {
     value: '',
@@ -38,6 +38,36 @@ class MemberForm extends Component {
     formIsValid: false
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.props.editing &&
+      prevProps.selectedMember !== this.props.selectedMember
+    ) {
+      const memberForm = {
+        name: {
+          ...prevState.memberForm.name,
+          value: this.props.selectedMember.name,
+          valid: true
+        },
+        email: {
+          ...prevState.memberForm.email,
+          value: this.props.selectedMember.email,
+          valid: true
+        },
+        location: {
+          ...prevState.memberForm.location,
+          value: this.props.selectedMember.location,
+          valid: true
+        },
+        department: {
+          ...prevState.memberForm.department,
+          value: this.props.selectedMember.department,
+          valid: true
+        }
+      };
+      this.setState({ memberForm: memberForm, formIsValid: true });
+    }
+  }
 
   memberInputChangeHandler = (input, value, files) => {
     this.setState(prevState => {
@@ -121,7 +151,7 @@ class MemberForm extends Component {
               touched={this.state.memberForm['name'].touched}
               value={this.state.memberForm['name'].value}
             />
-             <Input
+            <Input
               id="email"
               label="Email"
               control="input"
@@ -131,7 +161,7 @@ class MemberForm extends Component {
               touched={this.state.memberForm['email'].touched}
               value={this.state.memberForm['email'].value}
             />
-             <Input
+            <Input
               id="location"
               label="Location"
               control="input"
@@ -141,7 +171,7 @@ class MemberForm extends Component {
               touched={this.state.memberForm['location'].touched}
               value={this.state.memberForm['location'].value}
             />
-             <Input
+            <Input
               id="department"
               label="Department"
               control="input"

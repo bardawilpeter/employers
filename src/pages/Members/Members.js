@@ -12,6 +12,7 @@ class Members extends Component {
         members: [],
         totalMembers: 0,
         memberPage: 1,
+        editMember: null,
         editLoading: false
     };
 
@@ -84,13 +85,24 @@ class Members extends Component {
         this.setState({ isEditing: true });
     };
 
+    startEditMemberHandler = memberId => {
+        this.setState(prevState => {
+            const getMember = { ...prevState.members.find(p => p._id === memberId) };
+
+            return {
+                isEditing: true,
+                editMember: getMember
+            };
+        });
+    };
+
     cancelEditHandler = () => {
         this.setState({ isEditing: false });
     };
 
     finishEditHandler = MemberData => {
 
-        const graphqlQuery = {
+        let graphqlQuery = {
             query: `
             mutation {
             createEmployee(
@@ -111,6 +123,30 @@ class Members extends Component {
             }
             `
         };
+        if (this.state.editMember) {
+            graphqlQuery = {
+                query: `
+              mutation {
+                updateEmployee(
+                    id:"${this.state.editMember._id}",
+                    name: "${MemberData.name}", 
+                    email:"${MemberData.email}",
+                    location:"${MemberData.location}", 
+                    department:"${MemberData.department}",
+                    imageUrl:"qwqwqwq"
+                  ) {
+                    _id,
+                    name,
+                    email,
+                    location,
+                    department,
+                    imageUrl,
+                    createdAt
+                  }
+                }
+              `
+            };
+        }
         fetch('http://localhost:3033/graphql', {
             method: 'POST',
             headers: {
@@ -131,25 +167,36 @@ class Members extends Component {
                 if (resData.errors) {
                     throw new Error('User not authenticated.');
                 }
+                let queryReturnedType=(this.state.editMember)?"updateEmployee":"createEmployee";
                 const member = {
-                    _id: resData.data.createEmployee._id,
-                    name: resData.data.createEmployee.name,
-                    email: resData.data.createEmployee.email,
-                    location: resData.data.createEmployee.location,
-                    department: resData.data.createEmployee.department,
-                    createdAt: new Date(resData.data.createEmployee.createdAt).toLocaleDateString('en-US')
+                    _id: resData.data[queryReturnedType]._id,
+                    name: resData.data[queryReturnedType].name,
+                    email: resData.data[queryReturnedType].email,
+                    location: resData.data[queryReturnedType].location,
+                    department: resData.data[queryReturnedType].department,
+                    createdAt: new Date(resData.data[queryReturnedType].createdAt).toLocaleDateString('en-US')
                 };
+                console.log(member);
                 this.setState(prevState => {
                     let updatedMembers = [...prevState.members];
                     let updatedTotalMembers = prevState.totalMembers;
-                    updatedTotalMembers++;
-                    if (prevState.members.length >= 2) {
-                        updatedMembers.pop();
+                    if (prevState.editMember) {
+                        const getMemberIndex = prevState.members.findIndex(
+                            m => m._id == prevState.editMember._id
+                        );
+                        updatedMembers[getMemberIndex] = member;
                     }
-                    updatedMembers.unshift(member);
+                    else {
+                        updatedTotalMembers++;
+                        if (prevState.members.length >= 2) {
+                            updatedMembers.pop();
+                        }
+                        updatedMembers.unshift(member);
+                    }
                     return {
                         members: updatedMembers,
                         isEditing: false,
+                        editMember: null,
                         totalMembers: updatedTotalMembers
                     };
                 });
@@ -200,11 +247,12 @@ class Members extends Component {
             <Fragment>
                 <MemberForm
                     editing={this.state.isEditing}
+                    selectedMember={this.state.editMember}
                     loading={this.state.editLoading}
                     onCancelEdit={this.cancelEditHandler}
                     onFinishEdit={this.finishEditHandler}
                 />
-                <section className="feed__control">
+                <section className="member-action">
                     <Button onClick={this.newMemberHandler}>
                         New Member
                     </Button>
@@ -226,6 +274,7 @@ class Members extends Component {
                                 location={member.location}
                                 department={member.department}
                                 image={member.imagePath}
+                                onStartEdit={this.startEditMemberHandler.bind(this, member._id)}
                                 onDelete={this.deleteMemberHandler.bind(this, member._id)}
                             />
                         ))}
