@@ -4,23 +4,26 @@ import MemberItem from '../../components/MemberItem/MemberItem';
 import Button from '../../components/Button/Button';
 import Pagination from '../../components/Pagination/Pagination';
 import MemberForm from '../../components/MemberForm/MemberForm';
+import SearchHolder from '../../components/SearchHolder/SearchHolder';
 import './Members.css';
 
 class Members extends Component {
+    abortController = new window.AbortController();
     state = {
         isEditing: false,
         members: [],
         totalMembers: 0,
         memberPage: 1,
         editMember: null,
-        editLoading: false
+        editLoading: false,
+        searchQuery: null
     };
 
     componentDidMount() {
         this.loadMembers();
     }
 
-    loadMembers = direction => {
+    loadMembers = (direction) => {
         if (direction) {
             this.setState({ members: [] });
         }
@@ -33,7 +36,7 @@ class Members extends Component {
             page--;
             this.setState({ memberPage: page });
         }
-        const graphqlQuery = {
+        let graphqlQuery = {
             query: `
             query {
                 employees(page:${page}){
@@ -50,6 +53,25 @@ class Members extends Component {
               }
           `
         };
+        if (this.state.searchQuery) {
+            graphqlQuery = {
+                query: `
+                query {
+                    search(page:${page},searchValue:"${this.state.searchQuery}"){
+                      employeesList{
+                        _id,
+                        name,
+                        email,
+                        location,
+                        department,
+                        createdAt
+                      },
+                      totalEmployees
+                    }
+                  }
+                `
+            };
+        }
         fetch('http://localhost:3033/graphql', {
             method: 'POST',
             headers: {
@@ -65,14 +87,15 @@ class Members extends Component {
                 if (resData.errors) {
                     throw new Error('Failed to get members.');
                 }
+                let queryReturnedType = (resData.data.search != null) ? "search" : "employees";
                 this.setState({
-                    members: resData.data.employees.employeesList.map(member => {
+                    members: resData.data[queryReturnedType].employeesList.map(member => {
                         return {
                             ...member,
                             imagePath: member.imageUrl
                         };
                     }),
-                    totalMembers: resData.data.employees.totalEmployees
+                    totalMembers: resData.data[queryReturnedType].totalEmployees
                 });
             })
             .catch(err => {
@@ -95,6 +118,7 @@ class Members extends Component {
             };
         });
     };
+
 
     cancelEditHandler = () => {
         this.setState({ isEditing: false });
@@ -167,7 +191,7 @@ class Members extends Component {
                 if (resData.errors) {
                     throw new Error('User not authenticated.');
                 }
-                let queryReturnedType=(this.state.editMember)?"updateEmployee":"createEmployee";
+                let queryReturnedType = (this.state.editMember) ? "updateEmployee" : "createEmployee";
                 const member = {
                     _id: resData.data[queryReturnedType]._id,
                     name: resData.data[queryReturnedType].name,
@@ -176,7 +200,6 @@ class Members extends Component {
                     department: resData.data[queryReturnedType].department,
                     createdAt: new Date(resData.data[queryReturnedType].createdAt).toLocaleDateString('en-US')
                 };
-                console.log(member);
                 this.setState(prevState => {
                     let updatedMembers = [...prevState.members];
                     let updatedTotalMembers = prevState.totalMembers;
@@ -242,6 +265,15 @@ class Members extends Component {
             });
     };
 
+    memberSearchChangeHandler = (input, value) => {
+        this.setState({
+            searchQuery: (value != "") ? value : null,
+            memberPage: 1
+        }, () => {
+            this.loadMembers(null, value);
+        });
+    }
+
     render() {
         return (
             <Fragment>
@@ -251,6 +283,9 @@ class Members extends Component {
                     loading={this.state.editLoading}
                     onCancelEdit={this.cancelEditHandler}
                     onFinishEdit={this.finishEditHandler}
+                />
+                <SearchHolder
+                    onFinishSearch={this.memberSearchChangeHandler}
                 />
                 <section className="member-action">
                     <Button onClick={this.newMemberHandler}>
