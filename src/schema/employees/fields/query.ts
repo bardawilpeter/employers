@@ -4,7 +4,7 @@ import { GraphQLInt, GraphQLList, GraphQLString } from 'graphql'
 // App Imports
 import EmployeeListType from '../types/employee.list';
 import EmployeeType from '../types/employee';
-import { getEmployees, getEmployee } from '../resolvers';
+import { getEmployees, getEmployee, searchQuery } from '../resolvers';
 
 /**
    * employees query.
@@ -30,4 +30,19 @@ export const employee = {
         id: { type: GraphQLString }
     },
     resolve: getEmployee
+}
+
+
+/**
+   * employees query.
+   * Containing the fields that will be sent to graphql "getEmployees" resolver.
+   * page - number of the page that will be deisplayed in pagination
+*/
+export const search = {
+    type: EmployeeListType,
+    args: {
+        page: { type: GraphQLInt },
+        searchValue:{ type: GraphQLString }
+    },
+    resolve: searchQuery
 }

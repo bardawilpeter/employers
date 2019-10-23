@@ -19,7 +19,13 @@ export async function addEmployee(parentValue: any, args: any, req: any) {
     department: args.department,
     imageUrl: args.imageUrl
   });
-  return await employee.save();
+  const createdEmployee = await employee.save() as any;
+  return {
+    ...createdEmployee._doc,
+    _id: createdEmployee._id.toString(),
+    createdAt: createdEmployee.createdAt.toISOString(),
+    updatedAt: createdEmployee.updatedAt.toISOString()
+  };
 }
 
 /**
@@ -89,6 +95,42 @@ export async function getEmployee(parentValue: any, args: any, req: any) {
   };
 }
 
+
+/**
+  * Search Employees.
+  * @param {args} - containing params sent by graphql expecting (page).
+  * @return {employeesList:employeesList,totalEmployees:totalEmployees} contain employees list with total number of employees.
+*/
+export async function searchQuery(parentValue: any, args: any, req: any) {
+  checkAuth(req.isAuth);
+  const page = (!args.page) ? 1 : args.page;
+  const perPage = 2;
+  const queryOptions = {
+    $or: [
+      { name: { $regex: args.searchValue, $options: 'i' } },
+      { email: { $regex: args.searchValue, $options: 'i' } },
+      { location: { $regex: args.searchValue, $options: 'i' } },
+      { department: { $regex: args.searchValue, $options: 'i' } }
+    ]
+  };
+  const totalEmployees = await Employee.find(queryOptions).countDocuments();
+  const employees = await Employee.find(queryOptions)
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
+  return {
+    employeesList: employees.map((employee: any) => {
+      return {
+        ...employee._doc,
+        _id: employee._id.toString(),
+        createdAt: employee.get("createdAt").toISOString(),//TODO fix attribute to get from document
+        updatedAt: employee.get("updatedAt").toISOString()//TODO fix attribute to get from document
+      };
+    }),
+    totalEmployees: totalEmployees
+  };
+}
+
 /**
    * Delete Employee.
    * @param {args} - containing params sent by graphql expecting (id).
@@ -108,16 +150,16 @@ export async function deleteEmployee(parentValue: any, args: any, req: any) {
 */
 export function validateEmployee(args: any) {
   const errors = [];
-  if (validator.isEmpty(args.name) || validator.isLength(args.name, { min: 5 })) {
-    errors.push({ message: 'Title is invalid.' });
+  if (validator.isEmpty(args.name) || !validator.isLength(args.name, { min: 5 })) {
+    errors.push({ message: 'Name is invalid.' });
   }
   if (validator.isEmpty(args.email) || !validator.isEmail(args.email)) {
     errors.push({ message: 'Email is invalid.' });
   }
-  if (validator.isEmpty(args.location) || validator.isLength(args.name, { min: 5 })) {
+  if (validator.isEmpty(args.location) || !validator.isLength(args.location, { min: 5 })) {
     errors.push({ message: 'Location is invalid.' });
   }
-  if (validator.isEmpty(args.department) || validator.isLength(args.name, { min: 5 })) {
+  if (validator.isEmpty(args.department) || !validator.isLength(args.department, { min: 5 })) {
     errors.push({ message: 'Department is invalid.' });
   }
   if (errors.length > 0) {
