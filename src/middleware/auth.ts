@@ -6,7 +6,7 @@ import jwt = require('jsonwebtoken');
    * @param {req} - containing authorization params included in a bearer token
    * This function will decode the token and add userId and isAuth in header
 */
-export async function isAuth(req: any, res: any, next: any) {
+export function isAuth(req: any, res: any, next: any) {
     //Get Authorization from header
     const authHeader = req.get('Authorization');
     if (!authHeader) {
