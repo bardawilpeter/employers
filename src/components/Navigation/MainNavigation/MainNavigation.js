@@ -15,7 +15,7 @@ const mainNavigation = props => (
       </div>
       <div className="main-nav-items">
         <ul className="main-nav-items-list">
-          <NavigationItems isAuth={props.isAuth} onLogout={props.onLogout} />
+          <NavigationItems isAuth={props.isAuth} onLogout={props.onLogout} onHandle={props.onHandle}/>
         </ul>
       </div>
     </nav>

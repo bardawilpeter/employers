@@ -13,7 +13,7 @@ const navigationItems = props => [
   ...navItems
     .filter(item => item.auth === props.isAuth)
     .map(item => (
-      <li key={item.id} className="navigation-item">
+      <li key={item.id} onClick={props.onHandle} className="navigation-item">
         <NavLink to={item.link} exact>
           {item.text}
         </NavLink>

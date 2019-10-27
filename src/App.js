@@ -202,6 +202,7 @@ class App extends Component {
           header={
             <MainNavigation
               onLogout={this.logoutHandler}
+              onHandle={this.errorHandler}
               isAuth={this.state.isAuth}
             />
           }
