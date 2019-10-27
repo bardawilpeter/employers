@@ -1,21 +1,10 @@
-*{
-  box-sizing: border-box;
-}
 body {
   margin: 0;
-  font-family: Arial;
   background: #1f2866;
-}
-.App {
-  text-align: center;
+  font-family: Arial;
 }
 
-.wrapper{
-  width:80%;
-  margin:0 auto;
-}
-@media (max-width: 768px) {
-  .wrapper{
-    width: 90%;
-  }
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
