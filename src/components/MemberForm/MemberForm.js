@@ -1,38 +1,39 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from "react";
 
-import FormHolder from '../FormHolder/FormHolder';
-import Input from '../Form/Input/Input';
-import FileField from '../Form/Input/FileField';
-import { required, length, email } from '../../util/validators';
-import './MemberForm.css';
+import FormHolder from "../FormHolder/FormHolder";
+import Input from "../Form/Input/Input";
+import FileField from "../Form/Input/FileField";
+import Loader from "../Loader/Loader";
+import { required, length, email, file } from "../../util/validators";
+import "./MemberForm.css";
 
 const MEMBER_INIIAL_FORM = {
   name: {
-    value: '',
+    value: "",
     valid: false,
     touched: false,
     validators: [required, length({ min: 5 })]
   },
   image: {
-    value: '',
+    value: "",
     valid: false,
     touched: false,
-    validators: [required]
+    validators: [file({ max: 1 })]
   },
   email: {
-    value: '',
+    value: "",
     valid: false,
     touched: false,
     validators: [required, email]
   },
   location: {
-    value: '',
+    value: "",
     valid: false,
     touched: false,
     validators: [required, length({ min: 5 })]
   },
   department: {
-    value: '',
+    value: "",
     valid: false,
     touched: false,
     validators: [required, length({ min: 5 })]
@@ -42,7 +43,8 @@ const MEMBER_INIIAL_FORM = {
 class MemberForm extends Component {
   state = {
     memberForm: MEMBER_INIIAL_FORM,
-    formIsValid: false
+    formIsValid: false,
+    formLoading: true
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -85,7 +87,9 @@ class MemberForm extends Component {
     this.setState(prevState => {
       let isValid = true;
       for (const validator of prevState.memberForm[input].validators) {
-        isValid = isValid && validator(value);
+        isValid = (files)?isValid && validator(files):isValid && validator(value);
+        
+
       }
       const updatedForm = {
         ...prevState.memberForm,
@@ -153,6 +157,11 @@ class MemberForm extends Component {
           onSubmitForm={this.submitMemberChangeHandler}
           isLoading={this.props.loading}
         >
+          {this.props.loading && (
+            <div className="form-loader-holder">
+              <Loader />
+            </div>
+          )}
           <form>
             <Input
               id="name"
@@ -160,10 +169,10 @@ class MemberForm extends Component {
               control="input"
               required={true}
               onChange={this.memberInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'name')}
-              valid={this.state.memberForm['name'].valid}
-              touched={this.state.memberForm['name'].touched}
-              value={this.state.memberForm['name'].value}
+              onBlur={this.inputBlurHandler.bind(this, "name")}
+              valid={this.state.memberForm["name"].valid}
+              touched={this.state.memberForm["name"].touched}
+              value={this.state.memberForm["name"].value}
             />
             <Input
               id="email"
@@ -171,10 +180,10 @@ class MemberForm extends Component {
               control="input"
               required={true}
               onChange={this.memberInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'email')}
-              valid={this.state.memberForm['email'].valid}
-              touched={this.state.memberForm['email'].touched}
-              value={this.state.memberForm['email'].value}
+              onBlur={this.inputBlurHandler.bind(this, "email")}
+              valid={this.state.memberForm["email"].valid}
+              touched={this.state.memberForm["email"].touched}
+              value={this.state.memberForm["email"].value}
             />
             <Input
               id="location"
@@ -182,10 +191,10 @@ class MemberForm extends Component {
               control="input"
               required={true}
               onChange={this.memberInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'location')}
-              valid={this.state.memberForm['location'].valid}
-              touched={this.state.memberForm['location'].touched}
-              value={this.state.memberForm['location'].value}
+              onBlur={this.inputBlurHandler.bind(this, "location")}
+              valid={this.state.memberForm["location"].valid}
+              touched={this.state.memberForm["location"].touched}
+              value={this.state.memberForm["location"].value}
             />
             <Input
               id="department"
@@ -193,20 +202,20 @@ class MemberForm extends Component {
               control="input"
               required={true}
               onChange={this.memberInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'department')}
-              valid={this.state.memberForm['department'].valid}
-              touched={this.state.memberForm['department'].touched}
-              value={this.state.memberForm['department'].value}
+              onBlur={this.inputBlurHandler.bind(this, "department")}
+              valid={this.state.memberForm["department"].valid}
+              touched={this.state.memberForm["department"].touched}
+              value={this.state.memberForm["department"].value}
             />
-             <FileField
+            <FileField
               id="image"
-              label="Image"
+              label="Image (extension must be:jpg, jpeg, png and size below 1MB)"
               control="input"
               required={true}
               onChange={this.memberInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'image')}
-              valid={this.state.memberForm['image'].valid}
-              touched={this.state.memberForm['image'].touched}
+              onBlur={this.inputBlurHandler.bind(this, "image")}
+              valid={this.state.memberForm["image"].valid}
+              touched={this.state.memberForm["image"].touched}
             />
           </form>
         </FormHolder>

@@ -19,8 +19,9 @@
 .member-item .member-item-head figure {
   max-width: 300px;
   margin: 0;
-  margin-bottom: 10px;
-  min-height: 170px;
+  margin-bottom: 15px;
+  height: 180px;
+  overflow: hidden;
 }
 .member-item .member-item-head figure img {
   width: 100%;
