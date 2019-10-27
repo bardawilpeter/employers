@@ -11,7 +11,8 @@ import './App.css';
 class App extends Component {
   state = {
     isAuth: false,
-    reqLoading: false
+    reqLoading: false,
+    error:null
   };
 
   componentDidMount() {
@@ -61,12 +62,12 @@ class App extends Component {
           this.setState({ reqLoading: false });
           throw new Error('User login failed. check username or password.');
         }
-        console.log(resData);
         this.setState({
           isAuth: true,
           token: resData.data.userLogin.token,
           userId: resData.data.userLogin.id,
-          reqLoading: false
+          reqLoading: false,
+          error:null
         });
         localStorage.setItem('token', resData.data.userLogin.token);
         localStorage.setItem('userId', resData.data.userLogin.userId);
@@ -77,10 +78,10 @@ class App extends Component {
         localStorage.setItem('expiryDate', expiryDate.toISOString());
       })
       .catch(err => {
-        console.log(err);
         this.setState({
           isAuth: false,
-          reqLoading: false
+          reqLoading: false,
+          error:err
         });
       });
   };
@@ -101,6 +102,7 @@ class App extends Component {
       }
       `
     };
+    this.setState({ reqLoading: true });
     fetch('http://localhost:3033/graphql', {
       method: 'POST',
       headers: {
@@ -112,15 +114,14 @@ class App extends Component {
         return res.json();
       })
       .then(resData => {
-        if (resData.errors && resData.errors[0].status === 422) {
-          throw new Error(
-            "Validation failed. check you email address"
-          );
-        }
         if (resData.errors) {
-          throw new Error('User creation failed');
+          throw new Error('User creation failed check your email address');
         }
-        this.setState({ isAuth: false, reqLoading: false });
+        this.setState({ 
+          isAuth: false,
+          reqLoading: false,
+          error:null
+        });
         this.props.history.replace('/');
       })
       .catch(err => {
@@ -145,6 +146,10 @@ class App extends Component {
     }, remainingTime);
   };
 
+  errorHandler = () => {
+    this.setState({ error: null });
+  };
+
   render() {
     let routes = (
       <Switch>
@@ -156,6 +161,7 @@ class App extends Component {
               {...props}
               onLogin={this.loginHandler}
               loading={this.state.reqLoading}
+              error={this.state.error}
             />
           )}
         />
@@ -166,7 +172,8 @@ class App extends Component {
             <SignupPage
               {...props}
               onSignup={this.signupHandler}
-              loading={this.state.authLoading}
+              loading={this.state.reqLoading}
+              error={this.state.error}
             />
           )}
         />

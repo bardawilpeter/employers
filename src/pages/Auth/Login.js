@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Input from "../../components/Form/Input/Input";
 import Button from "../../components/Button/Button";
 import Title from "../../components/Form/Title/Title";
+import ErrorHandler from "../../components/ErrorHandler/ErrorHandler";
 import { required, length, email } from "../../util/validators";
 import Auth from "./Auth";
 
@@ -68,6 +69,7 @@ class Login extends Component {
     return (
       <Auth>
         <Title title="Sign in" />
+        <ErrorHandler error={this.props.error}/>
         <form
           onSubmit={e =>
             this.props.onLogin(e, {
