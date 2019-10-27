@@ -5,6 +5,7 @@ import Button from "../../components/Button/Button";
 import Pagination from "../../components/Pagination/Pagination";
 import MemberForm from "../../components/MemberForm/MemberForm";
 import SearchHolder from "../../components/SearchHolder/SearchHolder";
+import Loader from "../../components/Loader/Loader";
 import "./Members.css";
 
 class Members extends Component {
@@ -15,7 +16,8 @@ class Members extends Component {
     memberPage: 1,
     editMember: null,
     editLoading: false,
-    searchQuery: null
+    searchQuery: null,
+    membersLoading: true
   };
 
   componentDidMount() {
@@ -24,7 +26,10 @@ class Members extends Component {
 
   loadMembers = direction => {
     if (direction) {
-      this.setState({ members: [] });
+      this.setState({
+        members: [],
+        membersLoading: true
+      });
     }
     let page = this.state.memberPage;
     if (direction === "next") {
@@ -97,7 +102,8 @@ class Members extends Component {
               imageUrl: member.imageUrl
             };
           }),
-          totalMembers: resData.data[queryReturnedType].totalEmployees
+          totalMembers: resData.data[queryReturnedType].totalEmployees,
+          membersLoading: false
         });
       })
       .catch(err => {
@@ -136,7 +142,9 @@ class Members extends Component {
     })
       .then(res => res.json())
       .then(fileResData => {
-        const imageUrl = (!fileResData.imageUrl)?this.state.editMember.imageUrl:fileResData.imageUrl;
+        const imageUrl = !fileResData.imageUrl
+          ? this.state.editMember.imageUrl
+          : fileResData.imageUrl;
         let graphqlQuery = {
           query: `
             mutation {
@@ -284,7 +292,9 @@ class Members extends Component {
     this.setState(
       {
         searchQuery: value !== "" ? value : null,
-        memberPage: 1
+        members:[],
+        memberPage: 1,
+        membersLoading:true
       },
       () => {
         this.loadMembers();
@@ -308,6 +318,9 @@ class Members extends Component {
             <Button onClick={this.newMemberHandler}>Add Member</Button>
           </section>
           <section className="members-list">
+            {this.state.membersLoading && (            
+                <Loader />
+            )}
             <Pagination
               onPrevious={this.loadMembers.bind(this, "previous")}
               onNext={this.loadMembers.bind(this, "next")}
