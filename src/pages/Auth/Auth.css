@@ -1,6 +1,21 @@
-.auth-form-holder form{
-    width: 40%;
-    margin:0 auto;
-    padding:20px 0;
-    text-align: center;
+.auth-form-holder {
+  background: #fff;
+  width: 520px;
+  position: absolute;
+  margin: 0 auto;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  border-radius: 10px;
+  padding: 20px;
+}
+.auth-form-holder form {
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .auth-form-holder {
+    width: 300px;
+  }
 }
