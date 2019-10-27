@@ -131,6 +131,7 @@ class Members extends Component {
   };
 
   finishEditHandler = MemberData => {
+    this.setState({editLoading:true});
     const formData = new FormData();
     formData.append("image", MemberData.image);
     fetch("http://localhost:3033/image-upload", {
@@ -204,9 +205,7 @@ class Members extends Component {
         return res.json();
       })
       .then(resData => {
-        if (resData.errors && resData.errors[0].status === 422) {
-          throw new Error("Validation failed. check you email address.");
-        }
+        this.setState({editLoading:false});
         if (resData.errors) {
           throw new Error("User not authenticated.");
         }
@@ -248,15 +247,19 @@ class Members extends Component {
         });
       })
       .catch(err => {
-        console.log(err);
         this.setState({
           isEditing: false,
+          editLoading:false,
           error: err
         });
       });
   };
 
   deleteMemberHandler = memberId => {
+    this.setState({
+      membersLoading: true,
+      members:[]
+    });
     const graphqlQuery = {
       query: `
             mutation {
@@ -292,9 +295,9 @@ class Members extends Component {
     this.setState(
       {
         searchQuery: value !== "" ? value : null,
-        members:[],
+        members: [],
         memberPage: 1,
-        membersLoading:true
+        membersLoading: true
       },
       () => {
         this.loadMembers();
@@ -318,9 +321,7 @@ class Members extends Component {
             <Button onClick={this.newMemberHandler}>Add Member</Button>
           </section>
           <section className="members-list">
-            {this.state.membersLoading && (            
-                <Loader />
-            )}
+            {this.state.membersLoading && <Loader />}
             <Pagination
               onPrevious={this.loadMembers.bind(this, "previous")}
               onNext={this.loadMembers.bind(this, "next")}
