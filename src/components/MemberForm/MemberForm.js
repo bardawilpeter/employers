@@ -58,7 +58,7 @@ class MemberForm extends Component {
         },
         image: {
           ...prevState.memberForm.image,
-          value: this.props.selectedMember.imagePath,
+          value: this.props.selectedMember.imageUrl,
           valid: true
         },
         email: {

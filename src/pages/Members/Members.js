@@ -125,7 +125,6 @@ class Members extends Component {
   };
 
   finishEditHandler = MemberData => {
-    console.log(MemberData);
     const formData = new FormData();
     formData.append("image", MemberData.image);
     fetch("http://localhost:3033/image-upload", {
@@ -137,7 +136,7 @@ class Members extends Component {
     })
       .then(res => res.json())
       .then(fileResData => {
-        const imageUrl = fileResData.imageUrl || "undefined";
+        const imageUrl = (!fileResData.imageUrl)?this.state.editMember.imageUrl:fileResData.imageUrl;
         let graphqlQuery = {
           query: `
             mutation {
