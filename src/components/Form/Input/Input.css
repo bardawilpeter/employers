@@ -5,14 +5,16 @@
 }
 .input-holder label{
     display: block;
-    color:#fff;
+    color:#1f2866;
     padding-bottom:10px;
 }
 
 .input-holder input{
-    height:30px;
+    height:40px;
     width:100%;
+    box-sizing: border-box;
     padding-left:10px;
+    outline: none;
 }
 
 .input-holder input.valid.touched{

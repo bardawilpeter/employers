@@ -1,4 +1,9 @@
-header{
-    background:#fff;
-    padding:30px 20px;
+header {
+  padding: 10px 20px;
+  background: #fff;
+}
+@media (max-width: 768px) {
+  header {
+    padding: 10px;
+  }
 }

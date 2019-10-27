@@ -1,0 +1,17 @@
+.pagination-actions{
+    padding-top:20px;
+    text-align: center;
+}
+.pagination-holder .pagination-action-item{
+    display: inline-block;
+    width: 70px;
+    height: 40px;
+    background: #fff;
+    color: #1f2866;
+    font-size:14px;
+    border:0;
+    cursor: pointer;
+}
+.pagination-holder .pagination-action-item:first-child{
+    margin-right: 10px;
+}

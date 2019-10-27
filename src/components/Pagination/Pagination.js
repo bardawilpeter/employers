@@ -5,10 +5,10 @@ import './Pagination.css';
 const pagination = props => (
   <div className="pagination-holder">
     {props.children}
-    <div className="paginations-actions">
+    <div className="pagination-actions">
       {props.currentPage > 1 && (
         <button className="pagination-action-item" onClick={props.onPrevious}>
-          Previous
+          Previous 
         </button>
       )}
       {props.currentPage < props.lastPage && (

@@ -1,0 +1,61 @@
+.member-item {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 5px;
+  margin-left: 1%;
+  width: 24%;
+  margin-bottom: 10px;
+}
+.member-item .member-item-head h2 {
+  color: #1f2866;
+  font-size: 18px;
+  font-weight: normal;
+  text-align: center;
+  border-bottom: 1px #1f2866 solid;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
+.member-item .member-item-head figure {
+  max-width: 300px;
+  margin: 0;
+  margin-bottom: 10px;
+  min-height: 170px;
+}
+.member-item .member-item-head figure img {
+  width: 100%;
+  display: block;
+}
+.member-item .member-item-info-holder .member-item-info {
+  margin-bottom: 10px;
+}
+.member-item .member-item-info-holder .member-item-info label {
+  display: inline-block;
+  width: 105px;
+}
+.member-item .member-item-actions {
+  text-align: center;
+}
+.member-item .member-item-actions .button {
+  margin-right: 10px;
+}
+@media (max-width: 1280px) {
+  .member-item {
+    width: 32.33%;
+  }
+}
+@media (max-width: 768px) {
+  .member-item {
+    width: 100%;
+    margin: 0 auto 10px;
+  }
+  .member-item {
+    width: 100%;
+    margin: 0 auto 10px;
+  }
+  .member-item .member-item-head,
+  .member-item .member-item-info-holder {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}

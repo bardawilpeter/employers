@@ -1,0 +1,19 @@
+.members-list-holder {
+  display: flex;
+  min-height: 400px;
+  flex-wrap: wrap;
+  margin:0 -10px;
+}
+.member-action {
+  text-align: center;
+  padding: 20px 0;
+}
+.member-action .button {
+  background: #fff;
+  color: #1f2866;
+}
+@media (max-width: 768px) {
+  .members-list-holder {
+    display: block;
+  }
+}
