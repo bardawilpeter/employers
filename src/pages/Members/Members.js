@@ -6,6 +6,8 @@ import Pagination from "../../components/Pagination/Pagination";
 import MemberForm from "../../components/MemberForm/MemberForm";
 import SearchHolder from "../../components/SearchHolder/SearchHolder";
 import Loader from "../../components/Loader/Loader";
+import MessageCaption from "../../components/MessageCaption/MessageCaption";
+import ApiConfig from "../../config/index";
 import "./Members.css";
 
 class Members extends Component {
@@ -78,7 +80,7 @@ class Members extends Component {
                 `
       };
     }
-    fetch("http://localhost:3033/graphql", {
+    fetch(ApiConfig.graphqlUrl, {
       method: "POST",
       headers: {
         Authorization: "Bearer " + this.props.token,
@@ -90,6 +92,10 @@ class Members extends Component {
         return res.json();
       })
       .then(resData => {
+
+        if (resData.errors&&resData.errors[0].status===401) {
+          throw new Error("User not authenticated.");
+        }
         if (resData.errors) {
           throw new Error("Failed to get members.");
         }
@@ -127,14 +133,14 @@ class Members extends Component {
   };
 
   cancelEditHandler = () => {
-    this.setState({ isEditing: false });
+    this.setState({ isEditing: false, editMember: null });
   };
 
   finishEditHandler = MemberData => {
-    this.setState({editLoading:true});
+    this.setState({ editLoading: true });
     const formData = new FormData();
     formData.append("image", MemberData.image);
-    fetch("http://localhost:3033/image-upload", {
+    fetch(ApiConfig.imageUploadUrl, {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + this.props.token
@@ -192,7 +198,7 @@ class Members extends Component {
           };
         }
 
-        return fetch("http://localhost:3033/graphql", {
+        return fetch(ApiConfig.graphqlUrl, {
           method: "POST",
           headers: {
             Authorization: "Bearer " + this.props.token,
@@ -205,7 +211,7 @@ class Members extends Component {
         return res.json();
       })
       .then(resData => {
-        this.setState({editLoading:false});
+        this.setState({ editLoading: false });
         if (resData.errors) {
           throw new Error("User not authenticated.");
         }
@@ -233,7 +239,7 @@ class Members extends Component {
             updatedMembers[getMemberIndex] = member;
           } else {
             updatedTotalMembers++;
-            if (prevState.members.length >= 2) {
+            if (prevState.members.length >= 4) {
               updatedMembers.pop();
             }
             updatedMembers.unshift(member);
@@ -249,7 +255,7 @@ class Members extends Component {
       .catch(err => {
         this.setState({
           isEditing: false,
-          editLoading:false,
+          editLoading: false,
           error: err
         });
       });
@@ -258,7 +264,7 @@ class Members extends Component {
   deleteMemberHandler = memberId => {
     this.setState({
       membersLoading: true,
-      members:[]
+      members: []
     });
     const graphqlQuery = {
       query: `
@@ -269,7 +275,7 @@ class Members extends Component {
             }
           `
     };
-    fetch("http://localhost:3033/graphql", {
+    fetch(ApiConfig.graphqlUrl, {
       method: "POST",
       headers: {
         Authorization: "Bearer " + this.props.token,
@@ -322,6 +328,11 @@ class Members extends Component {
           </section>
           <section className="members-list">
             {this.state.membersLoading && <Loader />}
+            <MessageCaption
+              message="No members found"
+              members={this.state.members}
+              loading={this.state.membersLoading}
+            />
             <Pagination
               onPrevious={this.loadMembers.bind(this, "previous")}
               onNext={this.loadMembers.bind(this, "next")}
