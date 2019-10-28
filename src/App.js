@@ -3,6 +3,7 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 
 import Layout from './components/Layout/Layout';
 import MainNavigation from './components/Navigation/MainNavigation/MainNavigation';
+import ApiConfig from './config/index';
 import LoginPage from './pages/Auth/Login';
 import SignupPage from './pages/Auth/Signup';
 import Members from './pages/Members/Members';
@@ -47,7 +48,7 @@ class App extends Component {
       `
     };
     this.setState({ reqLoading: true });
-    fetch('http://localhost:3033/graphql', {
+    fetch(ApiConfig.graphqlUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -103,7 +104,7 @@ class App extends Component {
       `
     };
     this.setState({ reqLoading: true });
-    fetch('http://localhost:3033/graphql', {
+    fetch(ApiConfig.graphqlUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
