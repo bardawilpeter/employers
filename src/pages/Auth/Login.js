@@ -69,7 +69,7 @@ class Login extends Component {
     return (
       <Auth>
         <Title title="Sign in" />
-        <ErrorHandler error={this.props.error}/>
+        <ErrorHandler error={this.props.error} />
         <form
           onSubmit={e =>
             this.props.onLogin(e, {

@@ -1,10 +1,10 @@
 .pagination-actions{
-    padding-top:20px;
+    padding:20px;
     text-align: center;
 }
 .pagination-holder .pagination-action-item{
     display: inline-block;
-    width: 70px;
+    width: 90px;
     height: 40px;
     background: #fff;
     color: #1f2866;

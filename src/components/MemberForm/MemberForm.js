@@ -151,7 +151,7 @@ class MemberForm extends Component {
     return this.props.editing ? (
       <Fragment>
         <FormHolder
-          title="New Member"
+          title={(this.props.selectedMember)?"Edit Member":"New Member"}
           submitEnabled={this.state.formIsValid}
           onCancelForm={this.cancelMemberChangeHandler}
           onSubmitForm={this.submitMemberChangeHandler}
@@ -165,7 +165,7 @@ class MemberForm extends Component {
           <form>
             <Input
               id="name"
-              label="Name"
+              label="Full Name*"
               control="input"
               required={true}
               onChange={this.memberInputChangeHandler}
@@ -176,7 +176,7 @@ class MemberForm extends Component {
             />
             <Input
               id="email"
-              label="Email"
+              label="Email*"
               control="input"
               required={true}
               onChange={this.memberInputChangeHandler}
@@ -187,7 +187,7 @@ class MemberForm extends Component {
             />
             <Input
               id="location"
-              label="Location"
+              label="Location*"
               control="input"
               required={true}
               onChange={this.memberInputChangeHandler}
@@ -198,7 +198,7 @@ class MemberForm extends Component {
             />
             <Input
               id="department"
-              label="Department"
+              label="Department*"
               control="input"
               required={true}
               onChange={this.memberInputChangeHandler}
@@ -209,7 +209,7 @@ class MemberForm extends Component {
             />
             <FileField
               id="image"
-              label="Image (extension must be:jpg, jpeg, png and size below 1MB)"
+              label="Image* (extension must be:jpg, jpeg, png and size below 1MB)"
               control="input"
               required={true}
               onChange={this.memberInputChangeHandler}

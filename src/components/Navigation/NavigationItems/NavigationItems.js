@@ -6,7 +6,7 @@ import "./NavigationItems.css";
 const navItems = [
   { id: "members", text: "members", link: "/", auth: true },
   { id: "login", text: "Login", link: "/", auth: false },
-  { id: "signup", text: "Signup", link: "/signup", auth: false }
+  { id: "signup", text: "Sign up", link: "/signup", auth: false }
 ];
 
 const navigationItems = props => [
