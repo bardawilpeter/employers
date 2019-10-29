@@ -92,8 +92,7 @@ class Members extends Component {
         return res.json();
       })
       .then(resData => {
-
-        if (resData.errors&&resData.errors[0].status===401) {
+        if (resData.errors && resData.errors[0].status === 401) {
           throw new Error("User not authenticated.");
         }
         if (resData.errors) {
@@ -328,11 +327,10 @@ class Members extends Component {
           </section>
           <section className="members-list">
             {this.state.membersLoading && <Loader />}
-            <MessageCaption
-              message="No members found"
-              members={this.state.members}
-              loading={this.state.membersLoading}
-            />
+
+            {this.state.members.length <= 0 && !this.state.membersLoading ? (
+              <MessageCaption message="No members found" />
+            ) : null}
             <Pagination
               onPrevious={this.loadMembers.bind(this, "previous")}
               onNext={this.loadMembers.bind(this, "next")}

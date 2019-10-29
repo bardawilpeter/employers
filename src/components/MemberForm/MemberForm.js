@@ -88,8 +88,6 @@ class MemberForm extends Component {
       let isValid = true;
       for (const validator of prevState.memberForm[input].validators) {
         isValid = (files)?isValid && validator(files):isValid && validator(value);
-        
-
       }
       const updatedForm = {
         ...prevState.memberForm,

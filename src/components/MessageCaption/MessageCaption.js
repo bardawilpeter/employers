@@ -4,9 +4,7 @@ import "./MessageCaption.css"
 
 const messageCaption = props => (
   <div className="message-data">
-    {props.members.length <= 0 && !props.loading ? (
-      props.message
-    ) : null}
+    {props.message}
   </div>
 );
 
