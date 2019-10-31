@@ -2,7 +2,9 @@
 import * as multer from "multer";
 import * as aws from "aws-sdk";
 import * as multerS3 from "multer-s3";
+import * as dotenv from 'dotenv';
 
+dotenv.config();
 // AWS configuration
 const awsConfig = {
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
