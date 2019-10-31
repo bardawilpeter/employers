@@ -3,6 +3,9 @@ import validator = require('validator');
 
 // App Imports
 import { Employee } from '../../models/employee';
+import IEmployee from "../../interfaces/IEmployee";
+import * as sendEmail from "../../services/mail"
+import * as templates from '../../templates/email';
 
 /**
    * Add Employee.
@@ -19,7 +22,8 @@ export async function addEmployee(parentValue: any, args: any, req: any) {
     department: args.department,
     imageUrl: args.imageUrl
   });
-  const createdEmployee = await employee.save() as any;
+  const createdEmployee = await employee.save() as IEmployee;
+  sendEmail.send(createdEmployee.email,templates.member(createdEmployee));
   return {
     ...createdEmployee._doc,
     _id: createdEmployee._id.toString(),
@@ -57,10 +61,9 @@ export async function setEmployee(parentValue: any, args: any, req: any) {
    * @return {employeesList:employeesList,totalEmployees:totalEmployees} contain employees list with total number of employees.
 */
 export async function getEmployees(parentValue: any, args: any, req: any) {
-  //TODO add ability to search in post
   checkAuth(req.isAuth);
   const page = (!args.page) ? 1 : args.page;
-  const perPage = 2;
+  const perPage = 4;
   const totalEmployees = await Employee.find().countDocuments();
   const employees = await Employee.find()
     .sort({ createdAt: -1 })
@@ -71,8 +74,8 @@ export async function getEmployees(parentValue: any, args: any, req: any) {
       return {
         ...employee._doc,
         _id: employee._id.toString(),
-        createdAt: employee.get("createdAt").toISOString(),//TODO fix attribute to get from document
-        updatedAt: employee.get("updatedAt").toISOString()//TODO fix attribute to get from document
+        createdAt: employee.createdAt.toISOString(),
+        updatedAt: employee.updatedAt.toISOString()
       };
     }),
     totalEmployees: totalEmployees
@@ -104,7 +107,7 @@ export async function getEmployee(parentValue: any, args: any, req: any) {
 export async function searchQuery(parentValue: any, args: any, req: any) {
   checkAuth(req.isAuth);
   const page = (!args.page) ? 1 : args.page;
-  const perPage = 2;
+  const perPage = 4;
   const queryOptions = {
     $or: [
       { name: { $regex: args.searchValue, $options: 'i' } },
@@ -123,8 +126,8 @@ export async function searchQuery(parentValue: any, args: any, req: any) {
       return {
         ...employee._doc,
         _id: employee._id.toString(),
-        createdAt: employee.get("createdAt").toISOString(),//TODO fix attribute to get from document
-        updatedAt: employee.get("updatedAt").toISOString()//TODO fix attribute to get from document
+        createdAt: employee.createdAt.toISOString(),
+        updatedAt: employee.updatedAt.toISOString()
       };
     }),
     totalEmployees: totalEmployees
