@@ -1,21 +1,21 @@
 // App Imports
-import { Express } from 'express';
-import {MongoDB} from './mongo-connection';
+import { Express } from "express";
+import { MongoDB } from "./mongo-connection";
 
 /**
-   * Express server.
-   * @param {server} - contain the initialized server instance 
-*/
-export default function (server: Express): void {
-    console.info('Loading express server with mongoDB...');
+ * Express server.
+ * @param {server} - contain the initialized server instance
+ */
+export default function(server: Express): void {
+  console.info("Loading express server with mongoDB...");
 
-    // Start web server
-    server.listen(process.env.PORT, (error: any) => {
-        MongoDB.connect();
-        if (error) {
-            console.error('Unable to start express server please check the port');
-        } else {
-            console.info(`Express server started on port ${process.env.PORT}.`);
-        }
-    })
+  // Start web server
+  server.listen(process.env.PORT, (error: any) => {
+    MongoDB.connect();
+    if (error) {
+      console.error("Unable to start express server please check the port");
+    } else {
+      console.info(`Express server started on port ${process.env.PORT}.`);
+    }
+  });
 }

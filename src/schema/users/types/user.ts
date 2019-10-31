@@ -1,22 +1,22 @@
 // Imports
-import { GraphQLObjectType, GraphQLString } from 'graphql'
+import { GraphQLObjectType, GraphQLString } from "graphql";
 
 /**
-   * UserType.
-   * Containing the fields that could be returned by graphql on user signup.
-   * id contain authenticated user id
-   * name contain user name
-   * email contain user email
-*/
+ * UserType.
+ * Containing the fields that could be returned by graphql on user signup.
+ * id contain authenticated user id
+ * name contain user name
+ * email contain user email
+ */
 const UserType = new GraphQLObjectType({
-    name: 'UserType',
-    description: 'This type will describe user fields',
+  name: "UserType",
+  description: "This type will describe user fields",
 
-    fields: () => ({
-        id: { type: GraphQLString },
-        name: { type: GraphQLString },
-        email: { type: GraphQLString }
-    })
+  fields: () => ({
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    email: { type: GraphQLString }
+  })
 });
 
-export default UserType
+export default UserType;

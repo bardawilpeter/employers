@@ -86,7 +86,7 @@ export async function login(parentValue: any, args: any) {
   );
   return {
     id: user._id,
-    token: token,
+    token,
     name: user.name
   };
 }

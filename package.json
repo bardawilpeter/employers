@@ -11,7 +11,8 @@
     "clean": "rimraf ./lib",
     "start": "npm run build && node lib/index.js",
     "start:dev": "nodemon",
-    "lint": "tslint 'src/**/*.{ts,tsx}'"
+    "lint": "tslint 'src/**/*.{ts,tsx}'",
+    "lint:fix": "tslint --fix 'src/**/*.{ts,tsx}'"
   },
   "author": "Peter Bardawil",
   "license": "MIT",
