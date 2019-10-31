@@ -18,6 +18,10 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true
+  },
+  isActive:{
+    type:Boolean,
+    default: false
   }
 },
 {timestamps:true});
