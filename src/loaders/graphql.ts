@@ -6,8 +6,8 @@ import { Express } from 'express';
 import schema from '../schema';
 
 /**
-   * Graphql server setup.
-   * @param {server} - contain the initialized server instance 
+* Graphql server setup.
+* @param {server} - contain the initialized server instance 
 */
 export default function setupGraphQL(server: Express): void {
     console.info('Loading graphql endpoint...')
@@ -23,7 +23,7 @@ export default function setupGraphQL(server: Express): void {
             const data = err.originalError.data;
             const message = err.message || 'An error occurred.';
             const code = err.originalError.code || 500;
-            return { message: message, status: code, data: data };
+            return { message, status: code, data };
         }
     })));
 }

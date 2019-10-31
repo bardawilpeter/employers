@@ -22,7 +22,7 @@ export default function (server: Express): void {
     // Auth middleware to check authorization header
     server.use(isAuth);
     // Route to upload image
-    server.put('/image-upload', Upload.single('image'), imageUpload);
+    server.put('/image-upload', Upload, imageUpload);
     // Request body parser
     server.use(bodyParser.json());
     server.use(bodyParser.urlencoded({ extended: false }));

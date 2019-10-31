@@ -4,7 +4,7 @@ import validator = require("validator");
 import jwt = require("jsonwebtoken");
 
 // App Imports
-import { User } from "../../models/user";
+import { User } from "../../models/User";
 import * as sendEmail from "../../services/mail";
 import * as templates from "../../templates/email";
 import IUser from "../../interfaces/IUser";

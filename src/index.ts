@@ -1,23 +1,23 @@
 // Imports
-import * as express from 'express';
-import * as dotenv from 'dotenv';
+import * as express from "express";
+import * as dotenv from "dotenv";
 
 // App Imports
-import setupLoadModules from './loaders/load-modules'
-import setupStartServer from './loaders/start-server'
-import setupGraphQL from './loaders/graphql';
+import setupLoadModules from "./loaders/load-modules";
+import setupStartServer from "./loaders/start-server";
+import setupGraphQL from "./loaders/graphql";
 
-//Enabling environment variables
+// Enabling environment variables
 dotenv.config();
 
 // Create express server
-const server = express()
+const server = express();
 
 // Setup load modules
-setupLoadModules(server)
+setupLoadModules(server);
 
 // Start server
-setupStartServer(server)
+setupStartServer(server);
 
 // Setup GraphQL
-setupGraphQL(server)
+setupGraphQL(server);
