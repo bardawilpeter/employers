@@ -1,0 +1,11 @@
+.confirm-alert{
+    padding:30px 0;
+    text-align: center;
+}
+.confirm-alert .confirm-alert-icon span{
+    font-size: 270px;
+    color:#fff;
+}
+.confirm-alert .confirm-alert-message .message-data{
+    font-size: 19px;
+}

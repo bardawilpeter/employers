@@ -1,0 +1,19 @@
+.main-nav::after{
+    content:"";
+    clear: both;
+    display:block;
+}
+.main-nav-items{
+    float:right;
+}
+.main-nav-logo{
+    color:#1f2866;
+    float:left;
+}
+
+.main-nav-logo a{
+    color:#1f2866;
+    text-decoration: none;
+    display: table;
+    height:75px;
+}

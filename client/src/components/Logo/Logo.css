@@ -1,0 +1,14 @@
+.logo {
+  width: 150px;
+  display: table-cell;
+  vertical-align: middle;
+}
+.logo img {
+  width: 100%;
+  display: block;
+}
+@media (max-width: 768px) {
+  .logo {
+    width: 95px;
+  }
+}
