@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import "./Loader.css";
+import './Loader.css';
 
-const loader = props => (
-  <div className="loader-holder">
-    <div className="loader">
-      <div></div>
-      <div></div>
+const loader = () => (
+    <div className="loader-holder">
+        <div className="loader">
+            <div />
+            <div />
+        </div>
     </div>
-  </div>
 );
 
 export default loader;

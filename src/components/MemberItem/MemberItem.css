@@ -30,7 +30,7 @@
 .member-item .member-item-info-holder .member-item-info {
   margin-bottom: 10px;
 }
-.member-item .member-item-info-holder .member-item-info label {
+.member-item .member-item-info-holder .member-item-info span {
   display: inline-block;
   width: 105px;
 }

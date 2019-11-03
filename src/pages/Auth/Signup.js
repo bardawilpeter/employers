@@ -1,125 +1,140 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import Input from "../../components/Form/Input/Input";
-import Button from "../../components/Button/Button";
-import Title from "../../components/Form/Title/Title";
-import ErrorHandler from "../../components/ErrorHandler/ErrorHandler";
-import { required, length, email } from "../../util/validators";
-import Auth from "./Auth";
+import Input from '../../components/Form/Input/Input';
+import Button from '../../components/Button/Button';
+import TitleCaption from '../../components/Form/TitleCaption/TitleCaption';
+import ErrorHandler from '../../components/ErrorHandler/ErrorHandler';
+import { required, length, email } from '../../util/validators';
+import Auth from './Auth';
+
+const propTypes = {
+    error: PropTypes.oneOfType([PropTypes.object, PropTypes.element]),
+    loading: PropTypes.oneOfType([PropTypes.bool, PropTypes.element]),
+    onSignup: PropTypes.oneOfType([PropTypes.func, PropTypes.element])
+};
+const defaultProps = {
+    error: {},
+    loading: false,
+    onSignup: () => {}
+};
 
 class Signup extends Component {
-  state = {
-    signupForm: {
-      email: {
-        value: "",
-        valid: false,
-        touched: false,
-        validators: [required, email]
-      },
-      password: {
-        value: "",
-        valid: false,
-        touched: false,
-        validators: [required, length({ min: 5 })]
-      },
-      name: {
-        value: "",
-        valid: false,
-        touched: false,
-        validators: [required]
-      },
-      formIsValid: false
-    }
-  };
-
-  inputChangeHandler = (input, value) => {
-    this.setState(prevState => {
-      let isValid = true;
-      for (const validator of prevState.signupForm[input].validators) {
-        isValid = isValid && validator(value);
-      }
-      const updatedForm = {
-        ...prevState.signupForm,
-        [input]: {
-          ...prevState.signupForm[input],
-          valid: isValid,
-          value: value
-        }
-      };
-      let formIsValid = true;
-      for (const inputName in updatedForm) {
-        formIsValid = formIsValid && updatedForm[inputName].valid;
-      }
-      return {
-        signupForm: updatedForm,
-        formIsValid: formIsValid
-      };
-    });
-  };
-
-  inputBlurHandler = input => {
-    this.setState(prevState => {
-      return {
+    state = {
         signupForm: {
-          ...prevState.signupForm,
-          [input]: {
-            ...prevState.signupForm[input],
-            touched: true
-          }
+            email: {
+                value: '',
+                valid: false,
+                touched: false,
+                validators: [required, email]
+            },
+            password: {
+                value: '',
+                valid: false,
+                touched: false,
+                validators: [required, length({ min: 5 })]
+            },
+            name: {
+                value: '',
+                valid: false,
+                touched: false,
+                validators: [required]
+            },
+            formIsValid: false
         }
-      };
-    });
-  };
+    };
 
-  render() {
-    return (
-      <Auth>
-        <Title title="Sign up" />
-        <ErrorHandler error={this.props.error}/>
-        <form onSubmit={e => this.props.onSignup(e, this.state)}>
-          <Input
-            id="email"
-            label="Email"
-            type="email"
-            control="input"
-            required={true}
-            onChange={this.inputChangeHandler}
-            onBlur={this.inputBlurHandler.bind(this, "email")}
-            value={this.state.signupForm["email"].value}
-            valid={this.state.signupForm["email"].valid}
-            touched={this.state.signupForm["email"].touched}
-          />
-          <Input
-            id="name"
-            label="Full Name"
-            type="text"
-            control="input"
-            required={true}
-            onChange={this.inputChangeHandler}
-            onBlur={this.inputBlurHandler.bind(this, "name")}
-            value={this.state.signupForm["name"].value}
-            valid={this.state.signupForm["name"].valid}
-            touched={this.state.signupForm["name"].touched}
-          />
-          <Input
-            id="password"
-            label="Password"
-            type="password"
-            control="input"
-            required={true}
-            onChange={this.inputChangeHandler}
-            onBlur={this.inputBlurHandler.bind(this, "password")}
-            value={this.state.signupForm["password"].value}
-            valid={this.state.signupForm["password"].valid}
-            touched={this.state.signupForm["password"].touched}
-          />
-          <Button type="submit" loading={this.props.loading}>
-            Sign up
-          </Button>
-        </form>
-      </Auth>
-    );
-  }
+    inputChangeHandler = (input, value) => {
+        this.setState(prevState => {
+            let isValid = true;
+            prevState.signupForm[input].validators.map(validator => {
+                isValid = isValid && validator(value);
+                return isValid;
+            });
+            const updatedForm = {
+                ...prevState.signupForm,
+                [input]: {
+                    ...prevState.signupForm[input],
+                    valid: isValid,
+                    value
+                }
+            };
+            let formIsValid = true;
+            Object.keys(updatedForm).map(inputName => {
+                formIsValid = formIsValid && updatedForm[inputName].valid;
+                return formIsValid;
+            });
+            return {
+                signupForm: updatedForm,
+                formIsValid
+            };
+        });
+    };
+
+    inputBlurHandler = input => {
+        this.setState(prevState => ({
+            signupForm: {
+                ...prevState.signupForm,
+                [input]: {
+                    ...prevState.signupForm[input],
+                    touched: true
+                }
+            }
+        }));
+    };
+
+    render() {
+        return (
+            <Auth>
+                <TitleCaption title="Sign up" />
+                <ErrorHandler error={this.props.error} />
+                <form onSubmit={e => this.props.onSignup(e, this.state)}>
+                    <Input
+                        id="email"
+                        label="Email"
+                        type="email"
+                        control="input"
+                        required
+                        onChange={this.inputChangeHandler}
+                        onBlur={this.inputBlurHandler.bind(this, 'email')}
+                        value={this.state.signupForm.email.value}
+                        valid={this.state.signupForm.email.valid}
+                        touched={this.state.signupForm.email.touched}
+                    />
+                    <Input
+                        id="name"
+                        label="Full Name"
+                        type="text"
+                        control="input"
+                        required
+                        onChange={this.inputChangeHandler}
+                        onBlur={this.inputBlurHandler.bind(this, 'name')}
+                        value={this.state.signupForm.name.value}
+                        valid={this.state.signupForm.name.valid}
+                        touched={this.state.signupForm.name.touched}
+                    />
+                    <Input
+                        id="password"
+                        label="Password"
+                        type="password"
+                        control="input"
+                        required
+                        onChange={this.inputChangeHandler}
+                        onBlur={this.inputBlurHandler.bind(this, 'password')}
+                        value={this.state.signupForm.password.value}
+                        valid={this.state.signupForm.password.valid}
+                        touched={this.state.signupForm.password.touched}
+                    />
+                    <Button type="submit" loading={this.props.loading}>
+                        Sign up
+                    </Button>
+                </form>
+            </Auth>
+        );
+    }
 }
+
+Signup.propTypes = propTypes;
+Signup.defaultProps = defaultProps;
 
 export default Signup;

@@ -1,6 +1,6 @@
 .members-list-holder {
   display: flex;
-  min-height: 400px;
+  min-height: 362px;
   flex-wrap: wrap;
   margin:0 -10px;
 }

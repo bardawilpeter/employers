@@ -1,11 +1,18 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import "./MessageCaption.css"
+import './MessageCaption.css';
 
-const messageCaption = props => (
-  <div className="message-data">
-    {props.message}
-  </div>
-);
+const propTypes = {
+    message: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+};
+const defaultProps = {
+    message: ''
+};
+
+const messageCaption = props => <div className="message-data">{props.message}</div>;
+
+messageCaption.propTypes = propTypes;
+messageCaption.defaultProps = defaultProps;
 
 export default messageCaption;

@@ -1,26 +1,68 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './Input.css';
 
-const input = props => (
+const propTypes = {
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    control: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    valid: PropTypes.oneOfType([PropTypes.bool, PropTypes.element]),
+    touched: PropTypes.oneOfType([PropTypes.bool, PropTypes.element]),
+    type: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    required: PropTypes.oneOfType([PropTypes.bool, PropTypes.element]),
+    placeholder: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    onChange: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
+    onBlur: PropTypes.oneOfType([PropTypes.func, PropTypes.element])
+};
+const defaultProps = {
+    id: '',
+    label: '',
+    control: 'input',
+    valid: true,
+    touched: false,
+    type: 'text',
+    required: false,
+    placeholder: '',
+    onChange: () => {},
+    onBlur: () => {}
+};
+
+const input = ({
+    id,
+    label,
+    control,
+    valid,
+    touched,
+    type,
+    value,
+    required,
+    placeholder,
+    onChange,
+    onBlur
+}) => (
     <div className="input-holder">
-        {props.label && <label htmlFor={props.id}>{props.label}</label>}
-        {props.control === 'input' && (
+        {label && <label htmlFor={id}>{label}</label>}
+        {control === 'input' && (
             <input
                 className={[
-                    !props.valid ? 'invalid' : 'valid',
-                    props.touched ? 'touched' : 'untouched'
+                    !valid ? 'invalid' : 'valid',
+                    touched ? 'touched' : 'untouched'
                 ].join(' ')}
-                type={props.type}
-                id={props.id}
-                required={props.required}
-                value={props.value}
-                placeholder={props.placeholder}
-                onChange={e => props.onChange(props.id, e.target.value, e.target.files)}
-                onBlur={props.onBlur}
+                type={type}
+                id={id}
+                required={required}
+                value={value}
+                placeholder={placeholder}
+                onChange={e => onChange(id, e.target.value)}
+                onBlur={onBlur}
             />
         )}
     </div>
 );
+
+input.propTypes = propTypes;
+input.defaultProps = defaultProps;
 
 export default input;

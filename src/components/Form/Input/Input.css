@@ -17,6 +17,10 @@
     outline: none;
 }
 
+.input-holder input[type=text],.input-holder input[type=email],.input-holder input[type=password]{
+    border: 1px #1f2866 solid;
+}
+
 .input-holder input.valid.touched{
    border:2px#33FF8A solid;
 }
