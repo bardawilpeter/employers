@@ -39,14 +39,14 @@ export async function addEmployee(parentValue: any, args: any, req: any) {
  */
 export async function setEmployee(parentValue: any, args: any, req: any) {
   checkAuth(req.isAuth);
-  const employee = await Employee.findById(args.id);
+  const employee = (await Employee.findById(args.id)) as IEmployee;
   validateEmployee(args);
-  employee.set("name", args.name);
-  employee.set("email", args.email);
-  employee.set("location", args.location);
-  employee.set("department", args.department);
-  employee.set("imageUrl", args.imageUrl);
-  const updatedEmployee = (await employee.save()) as any;
+  employee.name = args.name;
+  employee.email = args.email;
+  employee.location = args.location;
+  employee.department=args.department;
+  employee.imageUrl=args.imageUrl;
+  const updatedEmployee = (await employee.save()) as IEmployee;
   return {
     ...updatedEmployee._doc,
     _id: updatedEmployee._id.toString(),

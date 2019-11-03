@@ -7,6 +7,7 @@ export interface IEmployee extends Document {
   name: string;
   location: string;
   department: string;
+  imageUrl:string;
   createdAt: Date;
   updatedAt: Date;
 }
