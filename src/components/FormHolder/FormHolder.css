@@ -1,0 +1,31 @@
+.form-holder {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  right: 0;
+  width: 40%;
+  margin: 0 auto;
+  transform: translateY(-50%);
+  background: #fff;
+  padding: 30px;
+  z-index: 1;
+  border-radius: 5px;
+}
+.form-holder .form-holder-header h2 {
+  text-align: center;
+  border-bottom: 1px #1f2866 solid;
+  padding: 20px 0;
+  margin: 0;
+  margin-bottom: 10px;
+  color: #1f2866;
+  font-weight: normal;
+  font-size: 28px;
+}
+.form-holder .form-holder-actions .button {
+  margin-right: 10px;
+}
+@media (max-width: 768px) {
+  .form-holder {
+    width: 90%;
+  }
+}
