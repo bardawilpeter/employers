@@ -35,13 +35,13 @@ export const signup = {
 /**
  * Confirm mutation.
  * Containing the fields that will be sent to graphql "confirm" resolver.
- * id contain of the user
+ * verifyToken contain of the token of the user
  */
 export const confirmEmail = {
   type: UserType,
   args: {
-    id: {
-      name: "id",
+    verifyToken: {
+      name: "verifyToken",
       type: GraphQLString
     }
   },

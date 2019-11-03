@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string;
   name: string;
   isActive: boolean;
+  verifyToken:string,
   createdAt: string;
   updatedAt: string;
 }

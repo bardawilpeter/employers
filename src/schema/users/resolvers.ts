@@ -37,15 +37,17 @@ export async function createuser(parentValue: any, args: any){
     throw error;
   }
   const hashedPw = await bcrypt.hash(args.password, 12);
+  const verifyToken=await bcrypt.hash(new Date().toISOString(),12);
   const user = new User({
     email: args.email,
     name: args.name,
-    password: hashedPw
+    password: hashedPw,
+    verifyToken
   });
   const createdUser = (await user.save()) as IUser;
   sendEmail.send(
     createdUser.email,
-    templates.confirm(createdUser._id, createdUser.name)
+    templates.confirm(createdUser.verifyToken, createdUser.name)
   );
   return {
     id: createdUser._id,
@@ -97,7 +99,7 @@ export async function login(parentValue: any, args: any) {
  * @return {id:user._id,name:name,email:email} The confirmed user.
  */
 export async function confirm(parentValue: any, args: any) {
-  const user = (await User.findById(args.id)) as IUser;
+  const user = (await User.findOne({ verifyToken: args.verifyToken })) as IUser;
   if (!user) {
     const error = new Error("User not found.");
     throw error;

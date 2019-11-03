@@ -23,6 +23,10 @@ const userSchema = new Schema(
     isActive: {
       type: Boolean,
       default: false
+    },
+    verifyToken: {
+      type: String,
+      default: false
     }
   },
   { timestamps: true }
