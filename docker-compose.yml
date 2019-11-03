@@ -1,0 +1,21 @@
+version: "3"
+services:
+  app:
+    container_name: employers-container
+    restart: always
+    build: ./
+    environment:
+      - PORT=3000
+      - JWT_SECRET=###########
+      - MONGO_DB=mongodb://mongo:27017/employers
+      - AWS_ACCESS_KEY_ID=AKIAIdSQMJQQZDFHXYC2LFA
+      - AWS_SECRET_ACCESS_KEY=ygZvdssHMFGUvTvmL+iUMAiWq+CMozG3LaIVnGBBN86
+      - AWS_REGION=eu-west-1
+      - AWS_BUCKET_NAME=employers-postlight
+    ports:
+      - "8090:3000"
+  mongo:
+    container_name: employers-mongo
+    image: mongo
+    ports:
+      - "27017:27017"
