@@ -6,13 +6,19 @@ node('master') {
         checkout scm
     }
     stage('Build node packages') {
-        sh 'npm install'
+        dir("server/"){
+            sh 'npm install'
+        }
     }
     stage('Build image'){
+        dir("server/"){
        sh "docker build -t employers:app${BUILD_NUMBER} -f Dockerfile ."
+        }
     }
     stage('Integrations'){
+        dir("server/"){
         sh "docker-compose up -d"
+        }
     }
      stage('Push image') {
         docker.withRegistry( '', registryCredential ) { 
@@ -23,9 +29,13 @@ node('master') {
         }
     }
     stage('UnitTest') {
+        dir("server/"){
         sh 'npm test'
+        }
     }
     stage('Remove containers'){
+        dir("server/"){
         sh "docker-compose -f docker-compose.yml down -v"
+        }
     }
 }

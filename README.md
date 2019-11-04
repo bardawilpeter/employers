@@ -5,6 +5,8 @@ Peter Bardawil Postlight code challenge
 
 ![Technologies stack](https://employers-postlight.s3-eu-west-1.amazonaws.com/project-tech.jpg)
 
+## 🌎 Live Demo:
+[http://employers-frontend.s3-website-eu-west-1.amazonaws.com/](http://employers-frontend.s3-website-eu-west-1.amazonaws.com/)
 
 ## 🔧 Used Technologies:
 This project is an employers directory application that's built using latest and most stable open source technologies that each serve a specific purpose:
@@ -57,37 +59,54 @@ SMTP_EMAIL="smtp.mail.com"
 ```
 
 ### Docker compose:
-The app's Docker compose configuration consists of two main containers:
- - App: Handles the app's logic using NodeJS
+The app's Docker compose configuration consists of three main containers:
+ - Server: Handles the app's logic using NodeJS
  - Mongo: Handles the app's database using MongoDB 
+ - Client: Handles the client's app using ReactJS
 
 ```sh
-version: "3"
+version: "3.6"
 services:
-	app:
-		container_name: employers-container
-		restart: always
-		build: ./
-		environment:
-			- PORT=3000
-			- JWT_SECRET=###########
-			- MONGO_DB=mongodb://mongo:27017/employers
-			- AWS_ACCESS_KEY_ID=AKIAIdSQMJQQZDFHXYC2LFA
-			- AWS_SECRET_ACCESS_KEY=ygZvdssHMFGUvTvmL+iUMAiWq+CMozG3LaIVnGBBN86
-			- AWS_REGION=eu-west-1
-			- AWS_BUCKET_NAME=employers-postlight
-			- CLIENT_URL="http://localhost:3000"
-			- SMTP_HOST="smtp host"
-			- SMTP_USER="smtp user"
-			- SMTP_PASS="smtp pass"
-			- SMTP_EMAIL="smtp.mail.com"
-		ports:
-			- "8090:3000"
-	mongo:
-		container_name: employers-mongo
-		image: mongo
-		ports:
-			- "27017:27017"
+  server:
+    container_name: employers-container
+    restart: always
+    build: ./server
+    environment:
+      - PORT=3000
+      - JWT_SECRET=somesupersecretsecret
+      - MONGO_DB=mongodb://employer:test123@mongo:27017/employers
+      - AWS_ACCESS_KEY_ID=AKASSSAIASB4V6ISIKC5334SASITEU
+      - AWS_SECRET_ACCESS_KEY=PpsdJSAQCgvhuj/G+DDDiw/pyCCQ7/4eK/GQlcdjlASXPx
+      - AWS_REGION=eu-west-1
+      - AWS_BUCKET_NAME=employers-postlight
+      - CLIENT_URL=http://localhost:3000
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_USER=emaiused
+      - SMTP_PASS=passwordused
+      - SMTP_EMAIL=emailused
+    ports:
+      - "3000:3000"
+  mongo:
+    image: mongo
+    container_name: employers-mongo
+    environment:
+      - MONGO_INITDB_DATABASE=employers
+      - MONGO_INITDB_ROOT_USERNAME=employer
+      - MONGO_INITDB_ROOT_PASSWORD=test123
+    volumes:
+      - docker-data:/data/db
+      - ./db-init/:/docker-entrypoint-initdb.d
+    ports:
+      - "27017:27017"
+  client:
+    container_name: employer-client
+    build: ./client
+    ports:
+      - "8080:3000"
+volumes:
+  docker-data:
+    name: employers-db-data
+
 ```
 
 ### Docker hub integration:
@@ -100,36 +119,47 @@ The app uses a predefined pipeline available in the Jenkinsfile:
 
 ```sh
 node('master') {
-	def app;
-	def registryCredential='dockerhub';
-	def registry="peterbardawil/employers-api"
-	stage ('Checkout git'){
-		checkout scm
-	}
-	stage('Build node packages') {
-		sh 'npm install'
-	}
-	stage('Build image'){
-		sh "docker build -t employers:app${BUILD_NUMBER} -f Dockerfile ."
-	}
-	stage('Integrations'){
-		sh "docker-compose up -d"
-	}
-	stage('Push image') {
-		docker.withRegistry( '', registryCredential ) {
-		sh "docker tag employers_app ${registry}:api-dev${BUILD_NUMBER}"
-		sh "docker tag employers_app ${registry}:latest"
-		sh "docker push ${registry}:api-dev${BUILD_NUMBER}"
-		sh "docker push ${registry}:latest"
-		}
-	}
-	stage('UnitTest') {
-		sh 'npm test'
-	}
-	stage('Remove containers'){
-		sh "docker-compose -f docker-compose.yml down -v"
-	}
+    def app;
+    def registryCredential='dockerhub';
+    def registry="peterbardawil/employers-api"
+    stage ('Checkout git'){
+        checkout scm
+    }
+    stage('Build node packages') {
+        dir("server/"){
+            sh 'npm install'
+        }
+    }
+    stage('Build image'){
+        dir("server/"){
+       sh "docker build -t employers:app${BUILD_NUMBER} -f Dockerfile ."
+        }
+    }
+    stage('Integrations'){
+        dir("server/"){
+        sh "docker-compose up -d"
+        }
+    }
+     stage('Push image') {
+        docker.withRegistry( '', registryCredential ) { 
+            sh "docker tag server_app ${registry}:api-dev${BUILD_NUMBER}"
+            sh "docker tag server_app ${registry}:latest"
+            sh "docker push ${registry}:api-dev${BUILD_NUMBER}"
+            sh "docker push ${registry}:latest"
+        }
+    }
+    stage('UnitTest') {
+        dir("server/"){
+        sh 'npm test'
+        }
+    }
+    stage('Remove containers'){
+        dir("server/"){
+        sh "docker-compose -f docker-compose.yml down -v"
+        }
+    }
 }
+
 ```
 
 Jenkins Pipeline:
@@ -156,7 +186,6 @@ ec2:
 ### GraphQL API:
 
 <table width="100%" style="width: 100%">
-    <tbody>
         <tr valign="top">
             <td width="50%" style="width: 50%">
                 <p>Query - User Login</p>
@@ -434,8 +463,7 @@ mutation {
                 </pre>
             </td>
         </tr>
-        
-    </tbody>
+
 </table>
 
 
@@ -485,17 +513,7 @@ mutation {
 
 ## 🏗 Setup App
 
-### Setup Server
+### Setup Server and Client
 >1- Edit environment variables in `/server/docker-compose.yml`
 
->2- Running: `docker-compose up -d`
-
-
-### Setup Client
->1- Configure server endpoints in `/client/src/config/index.js`
-
->2- Dev: `yarn start`
-
->3- Lint: `yarn lint`
-
->4- Prod: `yarn build`
+>2- Running: `docker-compose up --build -d`
