@@ -67,7 +67,7 @@ export async function login(parentValue: any, args: any) {
     const error = new Error("User not found.");
     throw error;
   }
-  const isEqual = await bcrypt.compare(args.password, user.get("password"));
+  const isEqual = await bcrypt.compare(args.password, user.password);
   if (!isEqual) {
     const error = new Error("Password is incorrect.");
     throw error;
@@ -81,7 +81,7 @@ export async function login(parentValue: any, args: any) {
   const token = jwt.sign(
     {
       userId: user._id.toString(),
-      email: user.get("email")
+      email: user.email
     },
     process.env.JWT_SECRET,
     { expiresIn: "1h" }
@@ -99,7 +99,11 @@ export async function login(parentValue: any, args: any) {
  * @return {id:user._id,name:name,email:email} The confirmed user.
  */
 export async function confirm(parentValue: any, args: any) {
+<<<<<<< HEAD
   const user = (await User.findOne({ verifyToken: args.verifyToken })) as IUser;
+=======
+  const user = (await User.findById(args.verifyToken)) as IUser;
+>>>>>>> b92c827... add docker container for server
   if (!user) {
     const error = new Error("User not found.");
     throw error;
