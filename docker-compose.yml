@@ -8,15 +8,15 @@ services:
       - PORT=3000
       - JWT_SECRET=somesupersecretsecret
       - MONGO_DB=mongodb://employer:test123@mongo:27017/employers
-      - AWS_ACCESS_KEY_ID=AKIASB4V6ISIKC54ITEU
-      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_ACCESS_KEY_ID=AKASSSAIASB4V6ISIKC5334SASITEU
+      - AWS_SECRET_ACCESS_KEY=PpsdJSAQCgvhuj/G+DDDiw/pyCCQ7/4eK/GQlcdjlASXPx
       - AWS_REGION=eu-west-1
       - AWS_BUCKET_NAME=employers-postlight
       - CLIENT_URL=http://localhost:8080
       - SMTP_HOST=smtp.gmail.com
-      - SMTP_USER=peterbardawil@gmail.com
-      - SMTP_PASS=swardfish
-      - SMTP_EMAIL=peterbardawil@gmail.com
+      - SMTP_USER=emaiused
+      - SMTP_PASS=passwordused
+      - SMTP_EMAIL=emailused
     ports:
       - "3000:3000"
   mongo:
