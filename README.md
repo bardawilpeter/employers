@@ -100,45 +100,35 @@ The app uses a predefined pipeline available in the Jenkinsfile:
 
 ```sh
 node('master') {
-    def app;
-    def registryCredential='dockerhub';
-    def registry="peterbardawil/employers-api"
-    stage ('Checkout git'){
-        checkout scm
-    }
-    stage('Build node packages') {
-        dir("server/"){
-            sh 'npm install'
-        }
-    }
-    stage('Build image'){
-        dir("server/"){
-       sh "docker build -t employers:app${BUILD_NUMBER} -f Dockerfile ."
-        }
-    }
-    stage('Integrations'){
-        dir("server/"){
-        sh "docker-compose up -d"
-        }
-    }
-     stage('Push image') {
-        docker.withRegistry( '', registryCredential ) { 
-            sh "docker tag server_app ${registry}:api-dev${BUILD_NUMBER}"
-            sh "docker tag server_app ${registry}:latest"
-            sh "docker push ${registry}:api-dev${BUILD_NUMBER}"
-            sh "docker push ${registry}:latest"
-        }
-    }
-    stage('UnitTest') {
-        dir("server/"){
-        sh 'npm test'
-        }
-    }
-    stage('Remove containers'){
-        dir("server/"){
-        sh "docker-compose -f docker-compose.yml down -v"
-        }
-    }
+	def app;
+	def registryCredential='dockerhub';
+	def registry="peterbardawil/employers-api"
+	stage ('Checkout git'){
+		checkout scm
+	}
+	stage('Build node packages') {
+		sh 'npm install'
+	}
+	stage('Build image'){
+		sh "docker build -t employers:app${BUILD_NUMBER} -f Dockerfile ."
+	}
+	stage('Integrations'){
+		sh "docker-compose up -d"
+	}
+	stage('Push image') {
+		docker.withRegistry( '', registryCredential ) {
+		sh "docker tag employers_app ${registry}:api-dev${BUILD_NUMBER}"
+		sh "docker tag employers_app ${registry}:latest"
+		sh "docker push ${registry}:api-dev${BUILD_NUMBER}"
+		sh "docker push ${registry}:latest"
+		}
+	}
+	stage('UnitTest') {
+		sh 'npm test'
+	}
+	stage('Remove containers'){
+		sh "docker-compose -f docker-compose.yml down -v"
+	}
 }
 ```
 
