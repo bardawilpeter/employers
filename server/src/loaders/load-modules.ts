@@ -3,6 +3,7 @@ import * as cors from "cors";
 import { Express } from "express";
 import * as bodyParser from "body-parser";
 import * as dotenv from "dotenv";
+// App Imports
 import { isAuth } from "../middleware/auth";
 import Upload from "../services/s3-upload";
 import { imageUpload } from "../routes/upload";

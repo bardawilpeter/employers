@@ -1,0 +1,41 @@
+version: "3.6"
+services:
+  server:
+    container_name: employers-container
+    restart: always
+    build: ./server
+    environment:
+      - PORT=3000
+      - JWT_SECRET=somesupersecretsecret
+      - MONGO_DB=mongodb://employer:test123@mongo:27017/employers
+      - AWS_ACCESS_KEY_ID=AKIASB4V6ISIKC54ITEU
+      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_REGION=eu-west-1
+      - AWS_BUCKET_NAME=employers-postlight
+      - CLIENT_URL=http://localhost:8080
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_USER=peterbardawil@gmail.com
+      - SMTP_PASS=swardfish
+      - SMTP_EMAIL=peterbardawil@gmail.com
+    ports:
+      - "3000:3000"
+  mongo:
+    image: mongo
+    container_name: employers-mongo
+    environment:
+      - MONGO_INITDB_DATABASE=employers
+      - MONGO_INITDB_ROOT_USERNAME=employer
+      - MONGO_INITDB_ROOT_PASSWORD=test123
+    volumes:
+      - docker-data:/data/db
+      - ./db-init/:/docker-entrypoint-initdb.d
+    ports:
+      - "27017:27017"
+  client:
+    container_name: employer-client
+    build: ./client
+    ports:
+      - "8080:3000"
+volumes:
+  docker-data:
+    name: employers-db-data

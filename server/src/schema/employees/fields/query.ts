@@ -1,5 +1,5 @@
 // Imports
-import { GraphQLInt, GraphQLList, GraphQLString } from "graphql";
+import { GraphQLInt, GraphQLString } from "graphql";
 
 // App Imports
 import EmployeeListType from "../types/employee.list";

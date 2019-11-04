@@ -16,8 +16,13 @@ node('master') {
     }
      stage('Push image') {
         docker.withRegistry( '', registryCredential ) { 
+<<<<<<< HEAD
             sh "docker tag employers_app ${registry}:api-dev${BUILD_NUMBER}"
             sh "docker tag employers_app ${registry}:latest"
+=======
+            sh "docker tag server_app ${registry}:api-dev${BUILD_NUMBER}"
+            sh "docker tag server_app ${registry}:latest"
+>>>>>>> 01d4055... change jenkins pipeline
             sh "docker push ${registry}:api-dev${BUILD_NUMBER}"
             sh "docker push ${registry}:latest"
         }
