@@ -37,17 +37,15 @@ export async function createuser(parentValue: any, args: any){
     throw error;
   }
   const hashedPw = await bcrypt.hash(args.password, 12);
-  const verifyToken=await bcrypt.hash(new Date().toISOString(),12);
   const user = new User({
     email: args.email,
     name: args.name,
-    password: hashedPw,
-    verifyToken
+    password: hashedPw
   });
   const createdUser = (await user.save()) as IUser;
   sendEmail.send(
     createdUser.email,
-    templates.confirm(createdUser.verifyToken, createdUser.name)
+    templates.confirm(createdUser._id, createdUser.name)
   );
   return {
     id: createdUser._id,
