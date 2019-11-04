@@ -99,11 +99,7 @@ export async function login(parentValue: any, args: any) {
  * @return {id:user._id,name:name,email:email} The confirmed user.
  */
 export async function confirm(parentValue: any, args: any) {
-<<<<<<< HEAD
-  const user = (await User.findOne({ verifyToken: args.verifyToken })) as IUser;
-=======
   const user = (await User.findById(args.verifyToken)) as IUser;
->>>>>>> b92c827... add docker container for server
   if (!user) {
     const error = new Error("User not found.");
     throw error;
