@@ -8,13 +8,21 @@ import MessageCaption from '../../components/MessageCaption/MessageCaption';
 import './Confirm.css';
 
 class Confirm extends Component {
+    _isMounted = false;
     state = {
         confirmLoading: true
     };
 
     componentDidMount() {
+        this._isMounted = true;
+        if (this._isMounted) {
         this.confirmEmail(this.props.match.params.verifyToken);
+        }
     }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
 
     confirmEmail = verifyToken => {
         const graphqlQuery = {

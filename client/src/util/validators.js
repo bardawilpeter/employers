@@ -31,6 +31,8 @@ export const file = config => value => {
         ) {
             isValid = false;
         }
+    } else {
+        isValid = false;
     }
     return isValid;
 };
